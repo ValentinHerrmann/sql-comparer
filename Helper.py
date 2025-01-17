@@ -309,13 +309,31 @@ def checkTables(sqlPath, solPath):
     sol = normalizeSQLQuery(Ba.getSQLFromFile(solPath), bd)
 
     if("SELECT" in sql and "FROM" in sql):
+        endFromKeywords = ["WHERE", "GROUP", "ORDER", "LIMIT", ";"]
+
         start = str.find(sql, "FROM")
-        end = str.find(sql, "WHERE")
+        end = -1
+
+
+        for keyword in endFromKeywords:
+            if(str.find(sql, keyword) != -1):
+                end = str.find(sql, keyword)
+                break
+        end = len(sql)
+
         submission = str.strip(sql[start:end])
         print("'"+submission+"'")
 
         start = str.find(sol, "FROM")
-        end = str.find(sol, "WHERE")
+        end = -1
+        
+        for keyword in endFromKeywords:
+            if(str.find(sql, keyword) != -1):
+                end = str.find(sql, keyword)
+                break
+
+        end = len(sql)
+
         solution = str.strip(sol[start:end])
         print("'"+solution+"'")
 

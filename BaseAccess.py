@@ -99,7 +99,10 @@ def runAndGetStringTable_fromFile(path: str, count: int = 5):
 def getSQLFromFile(path: str):
     try:
         with open(path, "r") as f:
-            return f.read()
+            s = f.read()
+            if not s:
+                raise Exception("\nSQL-Datei ist leer. Aufgabe wurde noch nicht bearbeitet.")
+            return s
     except FileNotFoundError:
         raise Exception(f"\nSQL-Datei nicht gefunden! Überprüfe, dass der Name korrekt ist ({path.split('/')[-1]}) und die Datei nicht gelöscht oder in einen Unterordner verschoben wurde.")
 
