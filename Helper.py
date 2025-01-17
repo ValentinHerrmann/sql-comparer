@@ -319,7 +319,8 @@ def checkTables(sqlPath, solPath):
             if(str.find(sql, keyword) != -1):
                 end = str.find(sql, keyword)
                 break
-        end = len(sql)
+        if(end == -1):
+            end = len(sql)
 
         submission = str.strip(sql[start:end])
         print("'"+submission+"'")
@@ -328,11 +329,11 @@ def checkTables(sqlPath, solPath):
         end = -1
         
         for keyword in endFromKeywords:
-            if(str.find(sql, keyword) != -1):
-                end = str.find(sql, keyword)
+            if(str.find(sol, keyword) != -1):
+                end = str.find(sol, keyword)
                 break
-
-        end = len(sql)
+        if(end == -1):
+            end = len(sol)
 
         solution = str.strip(sol[start:end])
         print("'"+solution+"'")
