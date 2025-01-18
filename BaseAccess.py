@@ -154,7 +154,4 @@ def getTableDict():
         table_dict[table[0]] = [[c[1], mapDatabaseTypes(c[2])] for c in r]
 
     return table_dict
-
-
-
-# Ende der Datei (Dummy change)
+    
