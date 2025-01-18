@@ -45,21 +45,24 @@ def normalizeSQLQuery(query, baseDict):
                     return f"{identifier.get_real_name().lower()}"
         return str(identifier)
 
-    def process_select(select, alias_map):
+    def process_select(select, alias_map, insideFunction=False):
         select_tokens = []
         for token in select.tokens:
             if isinstance(token, IdentifierList):
                 for identifier in token.get_identifiers():
                     select_tokens.append(f"{process_identifier(identifier, alias_map, baseDict).lower()} as {identifier.get_real_name().lower()}")
             elif isinstance(token, Identifier):
-                select_tokens.append(f"{process_identifier(token, alias_map,  baseDict).lower()} as {token.get_real_name().lower()}")
+                if insideFunction:
+                    select_tokens.append(process_identifier(token, alias_map, baseDict).lower())
+                else:
+                    select_tokens.append(f"{process_identifier(token, alias_map,  baseDict).lower()} as {token.get_real_name().lower()}")
             elif isinstance(token, Function):
                 #select_tokens.append(f"{token.get_name().lower()}({process_identifier(token.get_parameters(), alias_map, baseDict).lower()})")
                 for par in token.tokens:
                     if isinstance(par, Identifier):
                         select_tokens.append(par.get_name().lower()+"(")
                     if isinstance(par, Parenthesis):
-                        select_tokens[-1] += process_select(par, alias_map)+")"
+                        select_tokens[-1] += process_select(par, alias_map, True)+") as funcResult" 
             elif token.ttype is Wildcard:
                 select_tokens.append("*")
             else:
@@ -78,10 +81,23 @@ def normalizeSQLQuery(query, baseDict):
                 elif isinstance(token, Identifier):
                     alias_map[token.get_real_name().lower()] = token.get_alias() or token.get_real_name()
                     from_tokens.append(f"{token.get_real_name().lower()} {alias_map[token.get_real_name().lower()].lower()}")
+                elif token.ttype is not None and token.ttype is Name:
+                    alias_map[token.value.lower()] = token.value.lower()
+                    from_tokens.append(f"{token.value.lower()} {alias_map[token.value.lower()].lower()}")
                 else:
                     continue
         from_tokens.sort()
         return ",".join(from_tokens)
+
+    def process_groupby(groupby_, alias_map):
+        groupby_tokens = []
+        if(isinstance(groupby_, Identifier)):
+            groupby_tokens.append(process_identifier(groupby_, alias_map, baseDict).lower())
+        elif isinstance(token, IdentifierList):
+            for identifier in token.get_identifiers():
+                groupby_tokens.append(process_identifier(identifier, alias_map, baseDict).lower())
+        groupby_tokens.sort()
+        return ",".join(groupby_tokens)
 
     def process_condition(token, alias_map, baseDict):
         left, operator, right = [t for t in token.tokens if not t.is_whitespace]
@@ -213,9 +229,13 @@ def normalizeSQLQuery(query, baseDict):
         elif token.ttype is DML and token.value.upper() == 'SELECT':
             formatted_query.append('SELECT')
         elif token.ttype is Keyword and token.value.upper() == 'FROM':
-            formatted_query.append('FROM')
-        elif isinstance(token, IdentifierList) and formatted_query and formatted_query[-1] == 'FROM':
+            formatted_query.append('FROM')  
+        elif token.ttype is Keyword and token.value.upper() == 'GROUP BY':
+            formatted_query.append('GROUP BY')
+        elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'FROM':
             formatted_query.append(process_from(token, alias_map))
+        elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'GROUP BY':
+            formatted_query.append(process_groupby(token, alias_map))
         elif isinstance(token, Where):
             formatted_query.append('WHERE')
             formatted_query.append(process_where(token, alias_map, baseDict))
@@ -350,8 +370,8 @@ def checkEquality(sqlPath, solPath):
     if(sql=='' or sol==''):
         return "\n\nSQL-Datei ist leer. Aufgabe wurde noch nicht bearbeitet."
 
-    if(sql==sol):
-        return ""
+    #if(sql==sol):
+    #    return ""
 
     result = buildAndSendCosetteRequest(bd, sql, sol)
 
