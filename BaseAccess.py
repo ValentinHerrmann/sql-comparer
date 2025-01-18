@@ -30,7 +30,7 @@ def runFromFile(path: str):
     return headers, rows
 
 
-def runAndGetStringTable_fromFile(path: str, count: int = 5):
+def runAndGetStringTable_fromFile(path: str, count: int = 5, maxLength: int = 85):
     try:
         headers, rows = runFromFile(path)
         resultCount = len(rows)
@@ -60,7 +60,7 @@ def runAndGetStringTable_fromFile(path: str, count: int = 5):
             spacingLength = len(spacing) * (len(matrix[0]) - 1)
 
             lineLength = sum([len(x[0]) for x in matrix]) + spacingLength
-            maxLength = 85
+            
 
             if lineLength > maxLength:
                 valLength = lineLength - spacingLength
