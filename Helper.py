@@ -370,8 +370,8 @@ def checkEquality(sqlPath, solPath):
     if(sql=='' or sol==''):
         return "\n\nSQL-Datei ist leer. Aufgabe wurde noch nicht bearbeitet."
 
-    #if(sql==sol):
-    #    return ""
+    if(sql==sol):
+        return ""
 
     result = buildAndSendCosetteRequest(bd, sql, sol)
 
