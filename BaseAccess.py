@@ -58,7 +58,8 @@ def runAndGetStringTable_fromFile(path: str, count: int = 5):
             normalizedRows = []
             spacing = "  "
             spacingLength = len(spacing) * (len(matrix[0]) - 1)
-            lineLength = sum([len(x) for x in matrix[0]]) + spacingLength
+
+            lineLength = sum([len(x[0]) for x in matrix]) + spacingLength
             maxLength = 85
 
             if lineLength > maxLength:
@@ -154,4 +155,3 @@ def getTableDict():
         table_dict[table[0]] = [[c[1], mapDatabaseTypes(c[2])] for c in r]
 
     return table_dict
-    
