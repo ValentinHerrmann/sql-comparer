@@ -1,7 +1,7 @@
 import sqlite3
 import os
 
-db = "sql/ladepunkte.db"
+db = "sql/databases/bayern.db"
 
 def run(sql: str):
     con = sqlite3.connect(db)
