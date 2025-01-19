@@ -271,13 +271,20 @@ def getTableScheme(table_name: str, tableDict: dict):
     schema = "(" + ",".join([f"{col[0]}:{col[1]}" for col in tab]) + ")"
     return schema
 
+def getCosetteKeyFromFile():
+    try:
+        with open("cosette_apikey.txt", "r") as f:
+            return f.read()
+    except FileNotFoundError:
+        return "NOKEY"
 
 def buildAndSendCosetteRequest(baseDict, sql, sol):
 
     err = ""
     for i in range(2):
         try:
-            apiKey="69f7ead93f81da018217bfc1e7b8b56a"
+            apiKey=getCosetteKeyFromFile()
+
 
             schema = ""
             for tab in baseDict.keys():
