@@ -1,6 +1,6 @@
 import sqlite3
 import os
-from importlib import resources
+#from importlib import resources
 
 
 __db=""
@@ -8,9 +8,10 @@ __db=""
 def setDBName(name: str):
     global __db
     print("Setting DB to: " + name)
-    with resources.path('sql_testing_tools', name) as db_path:
-        __db = str(db_path)
-        print(__db)
+    __db = "databases/"+name
+    #with resources.path('sql_testing_tools', name) as db_path:
+    #    __db = str(db_path)
+    #    print(__db)
 
 
 setDBName("bayern.db")
