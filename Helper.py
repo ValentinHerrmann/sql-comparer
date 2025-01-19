@@ -1,5 +1,5 @@
 import os
-from sql import BaseAccess as Ba
+from . import BaseAccess as Ba
 
 
 try:
@@ -138,6 +138,24 @@ def normalizeSQLQuery(query, baseDict):
                                sqlparse.tokens.Token.Literal.String.Single,
                                sqlparse.tokens.Token.Literal.String.Symbol)
 
+    def process_paranthesis(parenthesis, alias_map, baseDict):
+        toks = []
+
+        bracketsRequired = True
+
+
+        for token in parenthesis.tokens:
+            if isinstance(token, Comparison):
+                toks.append(process_condition(token, alias_map, baseDict))
+            elif isinstance(token, Parenthesis):
+                toks.append(process_paranthesis(token, alias_map, baseDict))
+
+            elif token.value == '(':
+                toks.append(token.value)
+            else:
+                continue
+        x = parenthesis.flatten()
+        return " ".join(toks)
 
     def process_where(where, alias_map, baseDict):
             conditions = []
@@ -154,6 +172,8 @@ def normalizeSQLQuery(query, baseDict):
                     conditions.append(token.value.upper())
                 elif isinstance(token, Comparison):
                     current_condition.append(process_condition(token, alias_map, baseDict))
+                elif isinstance(token, Parenthesis):
+                    current_condition.append(process_paranthesis(token, alias_map, baseDict))
                 else:
                     current_condition.append(token)
 

@@ -1,10 +1,22 @@
 import sqlite3
 import os
+from importlib import resources
 
-db = "sql/databases/bayern.db"
+
+__db=""
+
+def setDBName(name: str):
+    global __db
+    print("Setting DB to: " + name)
+    with resources.path('sql_testing_tools', name) as db_path:
+        __db = str(db_path)
+        print(__db)
+
+
+setDBName("bayern.db")
 
 def run(sql: str):
-    con = sqlite3.connect(db)
+    con = sqlite3.connect(__db)
     cur = con.cursor()
     cur.execute(sql)
     con.commit()
