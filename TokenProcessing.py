@@ -83,8 +83,8 @@ def process_groupby(groupby_, alias_map, baseDict: dict):
     groupby_tokens = []
     if(isinstance(groupby_, Identifier)):
         groupby_tokens.append(process_identifier(groupby_, alias_map, baseDict).lower())
-    elif isinstance(token, IdentifierList):
-        for identifier in token.get_identifiers():
+    elif isinstance(groupby_, IdentifierList):
+        for identifier in groupby_.get_identifiers():
             groupby_tokens.append(process_identifier(identifier, alias_map, baseDict).lower())
     groupby_tokens.sort()
     return ",".join(groupby_tokens)
@@ -230,6 +230,7 @@ def process_where(where, alias_map, baseDict: dict):
             return " ".join(conditions)
 
             where_index = query.upper().find('WHERE')
+            
             normalized_query = query[:where_index + 5] + ' ' + ' '.join(sorted_conditions)
 
 def process_where_xx(where, alias_map, baseDict: dict):
