@@ -49,21 +49,21 @@ class NormalizeQuery_test(unittest.TestCase):
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
-    # def test_a05_twoOR_withWithoutBrackets(self):
-    #     nr = '05'
-    #     td = Ba.getTableDict()
-    #     q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
-    #     q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
-    #     if q1 != q2:
-    #         self.fail("\n" + q1 + "\n" + q2)
-
-    def test_a06_AND_inBrackets_OR_outside(self):
-        nr = '06'
+    def test_a05_twoOR_withWithoutBrackets(self):
+        nr = '05'
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
+
+    # def test_a06_AND_inBrackets_OR_outside(self):
+    #     nr = '06'
+    #     td = Ba.getTableDict()
+    #     q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
+    #     q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+    #     if q1 != q2:
+    #         self.fail("\n" + q1 + "\n" + q2)
 
     # def test_a07_AND_inOutsideBrackets_OR_outside(self):
     #     nr = '07'
@@ -73,13 +73,13 @@ class NormalizeQuery_test(unittest.TestCase):
     #     if q1 != q2:
     #         self.fail("\n" + q1 + "\n" + q2)
 
-    def test_a08_OR_inBrackets_AND_outside(self):
-        nr = '08'
-        td = Ba.getTableDict()
-        q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
-        q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
-        if q1 != q2:
-            self.fail("\n" + q1 + "\n" + q2)
+    # def test_a08_OR_inBrackets_AND_outside(self):
+    #     nr = '08'
+    #     td = Ba.getTableDict()
+    #     q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
+    #     q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+    #     if q1 != q2:
+    #         self.fail("\n" + q1 + "\n" + q2)
 
     def test_a09_GROUP_CountSumAvg(self):
         nr = '09'
