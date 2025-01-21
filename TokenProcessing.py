@@ -198,8 +198,9 @@ def _where(where, alias_map, baseDict: dict, query: str):
     conditions = []
     current_condition = []
 
-    and_count = count_keywordValues_tokens(where.tokens, ['AND'])
-    or_count = count_keywordValues_tokens(where.tokens, ['OR'])
+    
+    and_count = where.normalized.upper().count(" AND ")
+    or_count = where.normalized.upper().count(" OR ")
 
 
     # No AND / OR
