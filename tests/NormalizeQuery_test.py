@@ -1,7 +1,10 @@
 import unittest
 
-import BaseAccess as Ba
-import Helper as He
+from .BaseAccess import *
+from .Helper import *
+
+#import BaseAccess as Ba
+#import Helper as He
 
 
 
