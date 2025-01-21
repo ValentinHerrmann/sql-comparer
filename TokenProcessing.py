@@ -3,6 +3,7 @@ from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function
 from sqlparse.tokens import Keyword, DML, Name, Wildcard
 
 import Helper as He
+
         
 #####################################
 #####################################
@@ -188,50 +189,50 @@ def process_2element_par(parenthesis, alias_map, baseDict: dict, keyword):
     return (" "+keyword+" ").join(toks)
 
 
-def process_where(where, alias_map, baseDict: dict):
-        conditions = []
-        current_condition = []
+def process_where(where, alias_map, baseDict: dict, query: str):
+    conditions = []
+    current_condition = []
 
-        for token in where.tokens:
-            if token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
-                continue
+    for token in where.tokens:
+        if token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
+            continue
 
-            if token.ttype is Keyword and token.value.upper() in ('AND', 'OR'):
-                if current_condition:
-                    conditions.append(''.join(str(t) for t in current_condition).strip())
-                    current_condition = []
-                conditions.append(token.value.upper())
-            elif isinstance(token, Comparison):
-                current_condition.append(process_condition(token, alias_map, baseDict))
-            elif isinstance(token, Parenthesis):
-                current_condition.append(process_paranthesis(token, alias_map, baseDict))
-            else:
-                current_condition.append(token)
-
-        if current_condition:
-            conditions.append(''.join(str(t) for t in current_condition).strip())
-
-        sorted_conditions = []
-        current_group = []
-        last_connector = ""
-
-        if "OR" not in conditions:
-            for condition in conditions:
-                if condition == 'AND':
-                    pass
-                else:
-                    current_group.append(condition)
-
-            if current_group:
-                sorted_conditions.extend(sorted(current_group))
-
-            return " AND ".join(sorted_conditions)
+        if token.ttype is Keyword and token.value.upper() in ('AND', 'OR'):
+            if current_condition:
+                conditions.append(''.join(str(t) for t in current_condition).strip())
+                current_condition = []
+            conditions.append(token.value.upper())
+        elif isinstance(token, Comparison):
+            current_condition.append(process_condition(token, alias_map, baseDict))
+        elif isinstance(token, Parenthesis):
+            current_condition.append(process_paranthesis(token, alias_map, baseDict))
         else:
-            return " ".join(conditions)
+            current_condition.append(token)
 
-            where_index = query.upper().find('WHERE')
-            
-            normalized_query = query[:where_index + 5] + ' ' + ' '.join(sorted_conditions)
+    if current_condition:
+        conditions.append(''.join(str(t) for t in current_condition).strip())
+
+    sorted_conditions = []
+    current_group = []
+    last_connector = ""
+
+    if "OR" not in conditions:
+        for condition in conditions:
+            if condition == 'AND':
+                pass
+            else:
+                current_group.append(condition)
+
+        if current_group:
+            sorted_conditions.extend(sorted(current_group))
+
+        return " AND ".join(sorted_conditions)
+    else:
+        return " ".join(conditions)
+
+        where_index = query.upper().find('WHERE')
+        
+        normalized_query = query[:where_index + 5] + ' ' + ' '.join(sorted_conditions)
 
 def process_where_xx(where, alias_map, baseDict: dict):
     where_tokens = []
