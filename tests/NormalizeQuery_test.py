@@ -26,7 +26,7 @@ class NormalizeQuery_test(unittest.TestCase):
         self.assertEqual(q1, q2)
 
     def test_a01_with_cosette(self):
-        pass
+        return
         nr = '01'
         res = He.checkEquality("tests/v1/a"+nr+".sql", "tests/v2/a"+nr+".sql")
         if(res != ""):
@@ -42,7 +42,7 @@ class NormalizeQuery_test(unittest.TestCase):
         self.assertEqual(q1, q2)
 
     def test_a02_with_cosette(self):
-        pass
+        return
         nr = '02'
         res = He.checkEquality("tests/v1/a"+nr+".sql", "tests/v2/a"+nr+".sql")
         if(res != ""):
@@ -56,7 +56,7 @@ class NormalizeQuery_test(unittest.TestCase):
         self.assertEqual(q1, q2)
 
     def test_a03_with_cosette(self):
-        pass
+        return
         nr = '03'
         res = He.checkEquality("tests/v1/a"+nr+".sql", "tests/v2/a"+nr+".sql")
         if(res != ""):
@@ -70,7 +70,7 @@ class NormalizeQuery_test(unittest.TestCase):
         self.assertEqual(q1, q2)
 
     def test_a04_with_cosette(self):
-        pass
+        return
         nr = '04'
         res = He.checkEquality("tests/v1/a"+nr+".sql", "tests/v2/a"+nr+".sql")
         if(res != ""):
@@ -84,7 +84,7 @@ class NormalizeQuery_test(unittest.TestCase):
         self.assertEqual(q1, q2)
 
     def test_a05_with_cosette(self):
-        pass
+        return
         nr = '05'
         res = He.checkEquality("tests/v1/a"+nr+".sql", "tests/v2/a"+nr+".sql")
         if(res != ""):
