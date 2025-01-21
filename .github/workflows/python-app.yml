@@ -37,3 +37,7 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+    - uses: gaelgirodon/ci-badges-action@v1
+      with:
+        gist-id: 5c995c8b11c13b47399534f910a15550
+        token: ${{ secrets.GIST_TOKEN }}
