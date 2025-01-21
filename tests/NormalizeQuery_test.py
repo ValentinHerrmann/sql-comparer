@@ -8,8 +8,6 @@ import unittest
 import BaseAccess as Ba
 import Helper as He
 
-
-
 Ba.setDBName("bayern.db")
 
 class NormalizeQuery_test(unittest.TestCase):
