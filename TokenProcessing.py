@@ -186,7 +186,8 @@ def process_2element_par(parenthesis, alias_map, baseDict: dict, keyword):
         elif isinstance(token, Parenthesis):
             toks.append(process_paranthesis(token, alias_map, baseDict))
     toks = toks.sort()
-    return (" "+keyword+" ").join(toks)
+    fill = (" "+keyword+" ")
+    return fill.join(toks)
 
 
 def process_where(where, alias_map, baseDict: dict, query: str):
