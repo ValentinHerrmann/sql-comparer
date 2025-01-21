@@ -1,6 +1,6 @@
 import sqlparse
 from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis
-from sqlparse.tokens import Keyword, DML, Name, Wildcard
+from sqlparse.tokens import Keyword, DML, Name, Wildcard, Whitespace
 
 import Helper as He
 
@@ -155,6 +155,8 @@ def _paranthesis(parenthesis, alias_map, baseDict: dict):
 
 
 
+
+
     for token in parenthesis.tokens:
         if isinstance(token, Comparison):
             toks.append(_condition(token, alias_map, baseDict))
@@ -190,15 +192,26 @@ def _2element_par(parenthesis, alias_map, baseDict: dict, keyword):
     return fill.join(toks)
 
 
-def count_keywordValues_tokens(tokens, values):
+def count_keywordValues(tokens, values):
     return len([token for token in tokens if token.ttype is Keyword and token.value.upper() in values])
 
 
-def _where(where, alias_map, baseDict: dict, query: str):
+def find_index_of_keyword(tokens, keyword):
+    for index, token in enumerate(tokens):
+        if token.ttype is Keyword and token.value.upper() == keyword:
+            return index
+    return -1  # Wenn kein AND-Token gefunden wird
+
+
+def _where(where, alias_map, baseDict: dict):
     conditions = []
     current_condition = []
 
+
+
+    isParanthesis = isinstance(where, Parenthesis)
     
+
     and_count = where.normalized.upper().count(" AND ")
     or_count = where.normalized.upper().count(" OR ")
 
@@ -206,51 +219,71 @@ def _where(where, alias_map, baseDict: dict, query: str):
     # No AND / OR
     if and_count + or_count == 0:
         return _where_simpleCondition(where, alias_map, baseDict)
+
     # only ANDs / only ORs
     elif and_count == 0 or or_count == 0:
         return _where_sameStrengthKeywords(where, alias_map, baseDict, " AND " if and_count > 0 else " OR ")
+    
+    # ANDs and ORs
 
+    where_tokens = [token for token in where.tokens if token.ttype is not Whitespace and token.value != "WHERE"]    
 
+    # count keywords on top level
+    top_and_count = count_keywordValues(where_tokens, ["AND"])
+    top_or_count = count_keywordValues(where_tokens, ["OR"])
 
-
-
-
-    for token in where.tokens:
-        if token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
-            continue
-
-        if token.ttype is Keyword and token.value.upper() in ('AND', 'OR'):
-            if current_condition:
-                conditions.append(''.join(str(t) for t in current_condition).strip())
-                current_condition = []
-            conditions.append(token.value.upper())
-        else:
-            current_condition.append(token)
-
-    if current_condition:
-        conditions.append(''.join(str(t) for t in current_condition).strip())
-
-    sorted_conditions = []
-    current_group = []
-    last_connector = ""
-
-    if "OR" not in conditions:
-        for condition in conditions:
-            if condition == 'AND':
-                pass
-            else:
-                current_group.append(condition)
-
-        if current_group:
-            sorted_conditions.extend(sorted(current_group))
-
-        return " AND ".join(sorted_conditions)
+    # two conditions on top level
+    if top_and_count + top_or_count == 1:
+        keyword = " AND " if top_and_count == 1 else " OR "
+        return _where_twoConditionsOnTopLevel(where, alias_map, baseDict, keyword, isParanthesis)
     else:
-        return " ".join(conditions)
+        where_tokens = _where_addBracketsAroundAND(where, alias_map, baseDict)
+        return _where(Where(where_tokens), alias_map, baseDict)
 
-        where_index = query.upper().find('WHERE')
+def _where_addBracketsAroundAND(where, alias_map, baseDict: dict):
+    index = find_index_of_keyword(where.tokens, "AND")
+    par = Parenthesis(where.tokens[index-2:index+3])
+    where_tokens = where.tokens[:index-2] + [par] + where.tokens[index+3:]
+    return where_tokens
+
+
+
+    # for token in where.tokens:
+    #     if token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
+    #         continue
+
+    #     if token.ttype is Keyword and token.value.upper() in ('AND', 'OR'):
+    #         if current_condition:
+    #             conditions.append(''.join(str(t) for t in current_condition).strip())
+    #             current_condition = []
+    #         conditions.append(token.value.upper())
+    #     else:
+    #         current_condition.append(token)
+
+    # if current_condition:
+    #     conditions.append(''.join(str(t) for t in current_condition).strip())
+
+    # sorted_conditions = []
+    # current_group = []
+    # last_connector = ""
+
+    # if "OR" not in conditions:
+    #     for condition in conditions:
+    #         if condition == 'AND':
+    #             pass
+    #         else:
+    #             current_group.append(condition)
+
+    #     if current_group:
+    #         sorted_conditions.extend(sorted(current_group))
+
+    #     return " AND ".join(sorted_conditions)
+    # else:
+    #     return " ".join(conditions)
+
+    #     where_index = query.upper().find('WHERE')
         
-        normalized_query = query[:where_index + 5] + ' ' + ' '.join(sorted_conditions)
+    #     normalized_query = query[:where_index + 5] + ' ' + ' '.join(sorted_conditions)
 
 
 
@@ -281,32 +314,43 @@ def _where_sameStrengthKeywords(where, alias_map, baseDict: dict, keyword: str):
     cond.sort()
     return keyword.join(cond)
 
-
-
-
-
-
-
-def _where_xx(where, alias_map, baseDict: dict):
-    where_tokens = []
-    for token in where.tokens:
-
-        if isinstance(token, Comparison):
-            left, operator, right = [t for t in token.tokens if not t.is_whitespace]
-            left = _identifier(left, alias_map, baseDict)
-            right = _identifier(right, alias_map, baseDict)
-            if left.lower() >= right.lower():
-                left, right = right, left
-                if operator.value == ">":
-                    operator = "<"
-                elif operator.value == "<":
-                    operator = ">"
-
-            where_tokens.append(f"{left.lower()} {operator} {right.lower()}")
-        elif token.ttype is Keyword:
-            where_tokens.append(token.value.upper())
-        elif token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
-            continue
+def _where_twoConditionsOnTopLevel(where, alias_map, baseDict: dict, keyword, isParanthesis):
+    current_condition = []
+    for tok in where.tokens:
+        if isinstance(tok, Comparison):
+            current_condition.append(_condition(tok, alias_map, baseDict))
+        elif isinstance(tok, Parenthesis):
+            current_condition.append(_where(tok, alias_map, baseDict))
+        current_condition.sort()
+        if keyword == " AND " or isParanthesis:
+            return "(" + keyword.join(current_condition) + ")"
         else:
-            where_tokens.append(str(token))
-    return " ".join(where_tokens)
+            return keyword.join(current_condition)
+
+
+
+
+# def _where_xx(where, alias_map, baseDict: dict):
+#     where_tokens = []
+#     for token in where.tokens:
+
+#         if isinstance(token, Comparison):
+#             left, operator, right = [t for t in token.tokens if not t.is_whitespace]
+#             left = _identifier(left, alias_map, baseDict)
+#             right = _identifier(right, alias_map, baseDict)
+#             if left.lower() >= right.lower():
+#                 left, right = right, left
+#                 if operator.value == ">":
+#                     operator = "<"
+#                 elif operator.value == "<":
+#                     operator = ">"
+
+#             where_tokens.append(f"{left.lower()} {operator} {right.lower()}")
+#         elif token.ttype is Keyword:
+#             where_tokens.append(token.value.upper())
+#         elif token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
+#             continue
+#         else:
+#             where_tokens.append(str(token))
+#     return " ".join(where_tokens)
+
