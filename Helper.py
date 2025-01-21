@@ -204,3 +204,4 @@ def checkEquality(sqlPath, solPath):
         return "\n\nDie Abgabe stimmt nicht mit der Musterlösung überein."
     return ""
 
+
