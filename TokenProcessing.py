@@ -8,7 +8,7 @@ import Helper as He
 #####################################
 #####################################
 
-def process_identifier(identifier, alias_map, baseDict: dict):
+def _identifier(identifier, alias_map, baseDict: dict):
         if isinstance(identifier, Identifier):
             if identifier.get_real_name() and identifier.get_parent_name() and identifier.get_parent_name().lower() in alias_map.keys():
                 return f"{alias_map[identifier.get_parent_name().lower()].lower()}.{identifier.get_real_name().lower()}"
@@ -26,24 +26,24 @@ def process_identifier(identifier, alias_map, baseDict: dict):
 #####################################
 
 
-def process_select(select, alias_map, baseDict: dict, insideFunction=False):
+def _select(select, alias_map, baseDict: dict, insideFunction=False):
     select_tokens = []
     for token in select.tokens:
         if isinstance(token, IdentifierList):
             for identifier in token.get_identifiers():
-                select_tokens.append(f"{process_identifier(identifier, alias_map, baseDict).lower()} as {identifier.get_real_name().lower()}")
+                select_tokens.append(f"{_identifier(identifier, alias_map, baseDict).lower()} as {identifier.get_real_name().lower()}")
         elif isinstance(token, Identifier):
             if insideFunction:
-                select_tokens.append(process_identifier(token, alias_map, baseDict).lower())
+                select_tokens.append(_identifier(token, alias_map, baseDict).lower())
             else:
-                select_tokens.append(f"{process_identifier(token, alias_map,  baseDict).lower()} as {token.get_real_name().lower()}")
+                select_tokens.append(f"{_identifier(token, alias_map,  baseDict).lower()} as {token.get_real_name().lower()}")
         elif isinstance(token, Function):
-            #select_tokens.append(f"{token.get_name().lower()}({process_identifier(token.get_parameters(), alias_map, baseDict).lower()})")
+            #select_tokens.append(f"{token.get_name().lower()}({_identifier(token.get_parameters(), alias_map, baseDict).lower()})")
             for par in token.tokens:
                 if isinstance(par, Identifier):
                     select_tokens.append(par.get_name().lower()+"(")
                 if isinstance(par, Parenthesis):
-                    select_tokens[-1] += process_select(par, alias_map, baseDict, True)+") as funcResult" 
+                    select_tokens[-1] += _select(par, alias_map, baseDict, True)+") as funcResult" 
         elif token.ttype is Wildcard:
             select_tokens.append("*")
         else:
@@ -56,7 +56,7 @@ def process_select(select, alias_map, baseDict: dict, insideFunction=False):
 #####################################
 
 
-def process_from(from_, alias_map, baseDict: dict):
+def _from(from_, alias_map, baseDict: dict):
     from_tokens = []
     if hasattr(from_, 'tokens'):
         for token in from_.tokens:
@@ -80,17 +80,17 @@ def process_from(from_, alias_map, baseDict: dict):
 #####################################
 
 
-def process_groupby(groupby_, alias_map, baseDict: dict):
+def _groupby(groupby_, alias_map, baseDict: dict):
     groupby_tokens = []
     if(isinstance(groupby_, Identifier)):
-        groupby_tokens.append(process_identifier(groupby_, alias_map, baseDict).lower())
+        groupby_tokens.append(_identifier(groupby_, alias_map, baseDict).lower())
     elif isinstance(groupby_, IdentifierList):
         for identifier in groupby_.get_identifiers():
-            groupby_tokens.append(process_identifier(identifier, alias_map, baseDict).lower())
+            groupby_tokens.append(_identifier(identifier, alias_map, baseDict).lower())
     groupby_tokens.sort()
     return ",".join(groupby_tokens)
 
-def process_condition(token, alias_map, baseDict: dict):
+def _condition(token, alias_map, baseDict: dict):
     left, operator, right = [t for t in token.tokens if not t.is_whitespace]
 
     flipAllowed = True
@@ -111,8 +111,8 @@ def process_condition(token, alias_map, baseDict: dict):
         rightLiteral = True
         flipAllowed = False
 
-    left = process_identifier(left, alias_map, baseDict)
-    right = process_identifier(right, alias_map, baseDict)
+    left = _identifier(left, alias_map, baseDict)
+    right = _identifier(right, alias_map, baseDict)
 
     if flipAllowed and left.lower() >= right.lower():
         left, right = right, left
@@ -135,7 +135,7 @@ def is_value(token):
 #####################################
 
 
-def process_paranthesis(parenthesis, alias_map, baseDict: dict):
+def _paranthesis(parenthesis, alias_map, baseDict: dict):
     toks = []
 
     bracketsRequired = True
@@ -146,10 +146,10 @@ def process_paranthesis(parenthesis, alias_map, baseDict: dict):
 
 
     if(and_count==1 and or_count == 0):
-        val = process_2element_par(parenthesis, alias_map, baseDict, "AND")
+        val = _2element_par(parenthesis, alias_map, baseDict, "AND")
         return val
     elif(and_count==0 and or_count == 1):
-        val = process_2element_par(parenthesis, alias_map, baseDict, "OR")
+        val = _2element_par(parenthesis, alias_map, baseDict, "OR")
         return val
 
 
@@ -157,9 +157,9 @@ def process_paranthesis(parenthesis, alias_map, baseDict: dict):
 
     for token in parenthesis.tokens:
         if isinstance(token, Comparison):
-            toks.append(process_condition(token, alias_map, baseDict))
+            toks.append(_condition(token, alias_map, baseDict))
         elif isinstance(token, Parenthesis):
-            toks.append(process_paranthesis(token, alias_map, baseDict))
+            toks.append(_paranthesis(token, alias_map, baseDict))
 
         elif token.ttype is Keyword: #AND,OR
             if token.value == "AND":
@@ -177,22 +177,35 @@ def process_paranthesis(parenthesis, alias_map, baseDict: dict):
     return " ".join(toks)
 
 
-def process_2element_par(parenthesis, alias_map, baseDict: dict, keyword):
+def _2element_par(parenthesis, alias_map, baseDict: dict, keyword):
     toks = []
 
     for token in parenthesis.tokens:
         if isinstance(token, Comparison):
-            toks.append(process_condition(token, alias_map, baseDict))
+            toks.append(_condition(token, alias_map, baseDict))
         elif isinstance(token, Parenthesis):
-            toks.append(process_paranthesis(token, alias_map, baseDict))
+            toks.append(_paranthesis(token, alias_map, baseDict))
     toks = toks.sort()
     fill = (" "+keyword+" ")
     return fill.join(toks)
 
 
-def process_where(where, alias_map, baseDict: dict, query: str):
+def count_keywordValues_tokens(tokens, values):
+    return len([token for token in tokens if token.ttype is Keyword and token.value.upper() in values])
+
+
+def _where(where, alias_map, baseDict: dict, query: str):
     conditions = []
     current_condition = []
+
+    and_count = count_keywordValues_tokens(where.tokens, ['AND'])
+    or_count = count_keywordValues_tokens(where.tokens, ['OR'])
+
+    if and_count + or_count == 0:
+        return _where_simpleCondition(where, alias_map, baseDict)
+    elif and_count == 0 or or_count == 0:
+        return _where_sameStrengthKeywords(where, alias_map, baseDict)
+
 
     for token in where.tokens:
         if token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
@@ -203,10 +216,6 @@ def process_where(where, alias_map, baseDict: dict, query: str):
                 conditions.append(''.join(str(t) for t in current_condition).strip())
                 current_condition = []
             conditions.append(token.value.upper())
-        elif isinstance(token, Comparison):
-            current_condition.append(process_condition(token, alias_map, baseDict))
-        elif isinstance(token, Parenthesis):
-            current_condition.append(process_paranthesis(token, alias_map, baseDict))
         else:
             current_condition.append(token)
 
@@ -235,14 +244,38 @@ def process_where(where, alias_map, baseDict: dict, query: str):
         
         normalized_query = query[:where_index + 5] + ' ' + ' '.join(sorted_conditions)
 
-def process_where_xx(where, alias_map, baseDict: dict):
+
+
+def _where_simpleCondition(where, alias_map, baseDict: dict):
+    cond = []
+    for tok in where.tokens:
+        if isinstance(tok, Comparison):
+            cond.append(_condition(tok, alias_map, baseDict))
+        elif isinstance(tok, Parenthesis):
+            for _tok in tok.tokens:
+                if isinstance(_tok, Comparison):
+                    cond.append(_condition(_tok, alias_map, baseDict))
+                elif isinstance(_tok, Parenthesis):
+                    tok = _tok
+    return "".join(cond)
+
+def _where_sameStrengthKeywords(where, alias_map, baseDict: dict):
+    pass
+
+
+
+
+
+
+
+def _where_xx(where, alias_map, baseDict: dict):
     where_tokens = []
     for token in where.tokens:
 
         if isinstance(token, Comparison):
             left, operator, right = [t for t in token.tokens if not t.is_whitespace]
-            left = process_identifier(left, alias_map, baseDict)
-            right = process_identifier(right, alias_map, baseDict)
+            left = _identifier(left, alias_map, baseDict)
+            right = _identifier(right, alias_map, baseDict)
             if left.lower() >= right.lower():
                 left, right = right, left
                 if operator.value == ">":
