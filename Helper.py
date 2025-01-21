@@ -1,12 +1,13 @@
 import os
-from . import BaseAccess as Ba
-from . import TokenProcessing as Tp
+import BaseAccess as Ba
+import TokenProcessing as Tp
 
 import requests
 import sqlparse
 
-from sqlparse.sql import *
-from sqlparse.tokens import *
+from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis
+from sqlparse.tokens import Keyword, DML, Name, Wildcard
+
 
 
 def normalizeSQLQuery(query, baseDict):
@@ -29,11 +30,11 @@ def normalizeSQLQuery(query, baseDict):
             pass
         elif isinstance(token, Identifier) and formatted_query and formatted_query[-1] == 'FROM':
             il = IdentifierList([token])
-            formatted_query.append(Tp.process_from(il, alias_map))
-            Tp.process_from(il, alias_map)
+            formatted_query.append(Tp.process_from(il, alias_map, baseDict))
+            Tp.process_from(il, alias_map, baseDict)
         elif isinstance(token, IdentifierList) and formatted_query and formatted_query[-1] == 'FROM':
-            formatted_query.append(Tp.process_from(token, alias_map))
-            Tp.process_from(token, alias_map)
+            formatted_query.append(Tp.process_from(token, alias_map, baseDict))
+            Tp.process_from(token, alias_map, baseDict)
 
     formatted_query = []
 
@@ -48,16 +49,16 @@ def normalizeSQLQuery(query, baseDict):
         elif token.ttype is Keyword and token.value.upper() == 'GROUP BY':
             formatted_query.append('GROUP BY')
         elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'FROM':
-            formatted_query.append(Tp.process_from(token, alias_map))
+            formatted_query.append(Tp.process_from(token, alias_map, baseDict))
         elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'GROUP BY':
-            formatted_query.append(Tp.process_groupby(token, alias_map))
+            formatted_query.append(Tp.process_groupby(token, alias_map, baseDict))
         elif isinstance(token, Where):
             formatted_query.append('WHERE')
             formatted_query.append(Tp.process_where(token, alias_map, baseDict))
         elif formatted_query and formatted_query[-1] == 'SELECT' and (isinstance(token, IdentifierList) or isinstance(token, Function) or isinstance(token, Identifier)):
             if isinstance(token, Function):
                 token = IdentifierList([token])
-            formatted_query.append(Tp.process_select(token, alias_map))
+            formatted_query.append(Tp.process_select(token, alias_map, baseDict))
         else:
             formatted_query.append(str(token))
 

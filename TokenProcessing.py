@@ -1,6 +1,8 @@
 import sqlparse
-from sqlparse.sql import *
-from sqlparse.tokens import *
+from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis
+from sqlparse.tokens import Keyword, DML, Name, Wildcard
+
+import Helper as He
         
 #####################################
 #####################################
@@ -10,7 +12,7 @@ def process_identifier(identifier, alias_map, baseDict: dict):
             if identifier.get_real_name() and identifier.get_parent_name() and identifier.get_parent_name().lower() in alias_map.keys():
                 return f"{alias_map[identifier.get_parent_name().lower()].lower()}.{identifier.get_real_name().lower()}"
             elif identifier.get_real_name():
-                tables = findTableForColumn(baseDict, identifier.get_real_name(), alias_map.keys())
+                tables = He.findTableForColumn(baseDict, identifier.get_real_name(), alias_map.keys())
                 if len(tables) == 1:
                     alias_map[tables[0].lower()] = tables[0]
                     return f"{tables[0].lower()}.{identifier.get_real_name().lower()}"
@@ -23,7 +25,7 @@ def process_identifier(identifier, alias_map, baseDict: dict):
 #####################################
 
 
-def process_select(select, alias_map, insideFunction=False):
+def process_select(select, alias_map, baseDict: dict, insideFunction=False):
     select_tokens = []
     for token in select.tokens:
         if isinstance(token, IdentifierList):
@@ -40,7 +42,7 @@ def process_select(select, alias_map, insideFunction=False):
                 if isinstance(par, Identifier):
                     select_tokens.append(par.get_name().lower()+"(")
                 if isinstance(par, Parenthesis):
-                    select_tokens[-1] += process_select(par, alias_map, True)+") as funcResult" 
+                    select_tokens[-1] += process_select(par, alias_map, baseDict, True)+") as funcResult" 
         elif token.ttype is Wildcard:
             select_tokens.append("*")
         else:
@@ -53,7 +55,7 @@ def process_select(select, alias_map, insideFunction=False):
 #####################################
 
 
-def process_from(from_, alias_map):
+def process_from(from_, alias_map, baseDict: dict):
     from_tokens = []
     if hasattr(from_, 'tokens'):
         for token in from_.tokens:
@@ -77,7 +79,7 @@ def process_from(from_, alias_map):
 #####################################
 
 
-def process_groupby(groupby_, alias_map):
+def process_groupby(groupby_, alias_map, baseDict: dict):
     groupby_tokens = []
     if(isinstance(groupby_, Identifier)):
         groupby_tokens.append(process_identifier(groupby_, alias_map, baseDict).lower())
@@ -87,7 +89,7 @@ def process_groupby(groupby_, alias_map):
     groupby_tokens.sort()
     return ",".join(groupby_tokens)
 
-def process_condition(token, alias_map, baseDict):
+def process_condition(token, alias_map, baseDict: dict):
     left, operator, right = [t for t in token.tokens if not t.is_whitespace]
 
     flipAllowed = True
@@ -132,7 +134,7 @@ def is_value(token):
 #####################################
 
 
-def process_paranthesis(parenthesis, alias_map, baseDict):
+def process_paranthesis(parenthesis, alias_map, baseDict: dict):
     toks = []
 
     bracketsRequired = True
@@ -174,7 +176,7 @@ def process_paranthesis(parenthesis, alias_map, baseDict):
     return " ".join(toks)
 
 
-def process_2element_par(parenthesis, alias_map, baseDict, keyword):
+def process_2element_par(parenthesis, alias_map, baseDict: dict, keyword):
     toks = []
 
     for token in parenthesis.tokens:
@@ -186,7 +188,7 @@ def process_2element_par(parenthesis, alias_map, baseDict, keyword):
     return (" "+keyword+" ").join(toks)
 
 
-def process_where(where, alias_map, baseDict):
+def process_where(where, alias_map, baseDict: dict):
         conditions = []
         current_condition = []
 
@@ -230,7 +232,7 @@ def process_where(where, alias_map, baseDict):
             where_index = query.upper().find('WHERE')
             normalized_query = query[:where_index + 5] + ' ' + ' '.join(sorted_conditions)
 
-def process_where_xx(where, alias_map, baseDict):
+def process_where_xx(where, alias_map, baseDict: dict):
     where_tokens = []
     for token in where.tokens:
 
