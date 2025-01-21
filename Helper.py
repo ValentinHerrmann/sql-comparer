@@ -53,7 +53,7 @@ def normalizeSQLQuery(query, baseDict):
             formatted_query.append(Tp._groupby(token, alias_map, baseDict))
         elif isinstance(token, Where):
             formatted_query.append('WHERE')
-            formatted_query.append(Tp._where(token, alias_map, baseDict, query))
+            formatted_query.append(Tp._where(token, alias_map, baseDict))
         elif formatted_query and formatted_query[-1] == 'SELECT' and (isinstance(token, IdentifierList) or isinstance(token, Function) or isinstance(token, Identifier)):
             if isinstance(token, Function):
                 token = IdentifierList([token])
