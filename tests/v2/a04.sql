@@ -1,3 +1,3 @@
-SELECT regierungsbezirk, SUM(einwohner_w), SUM(einwohner_m)
-FROM gemeinde
-GROUP BY regierungsbezirk
+SELECT name, einwohner_m, einwohner_w 
+FROM Gemeinde 
+WHERE (einwohner_m > 75000 OR flaeche > 150 OR 75000 < einwohner_w)

@@ -201,10 +201,17 @@ def _where(where, alias_map, baseDict: dict, query: str):
     and_count = count_keywordValues_tokens(where.tokens, ['AND'])
     or_count = count_keywordValues_tokens(where.tokens, ['OR'])
 
+
+    # No AND / OR
     if and_count + or_count == 0:
         return _where_simpleCondition(where, alias_map, baseDict)
+    # only ANDs / only ORs
     elif and_count == 0 or or_count == 0:
-        return _where_sameStrengthKeywords(where, alias_map, baseDict)
+        return _where_sameStrengthKeywords(where, alias_map, baseDict, " AND " if and_count > 0 else " OR ")
+
+
+
+
 
 
     for token in where.tokens:
@@ -259,8 +266,19 @@ def _where_simpleCondition(where, alias_map, baseDict: dict):
                     tok = _tok
     return "".join(cond)
 
-def _where_sameStrengthKeywords(where, alias_map, baseDict: dict):
-    pass
+def _where_sameStrengthKeywords(where, alias_map, baseDict: dict, keyword: str):
+    cond = []
+    for tok in where.tokens:
+        if isinstance(tok, Comparison):
+            cond.append(_condition(tok, alias_map, baseDict))
+        elif isinstance(tok, Parenthesis):
+            for _tok in tok.tokens:
+                if isinstance(_tok, Comparison):
+                    cond.append(_condition(_tok, alias_map, baseDict))
+                elif isinstance(_tok, Parenthesis):
+                    tok = _tok
+    cond.sort()
+    return keyword.join(cond)
 
 
 
