@@ -5,7 +5,10 @@ A library that normalizes simple SQL queries and compares them first by equality
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml)
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml)
 
-### V0.1.4
+
+
+### V0.1.4 + V0.1.5
+- V0.1.5 is just a reupload of V0.1.4
 - Chained conditions (with AND,OR and Paranthesises) in WHERE statement
 
 ### V0.1.3
