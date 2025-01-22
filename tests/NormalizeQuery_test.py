@@ -22,6 +22,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
     
@@ -30,6 +34,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -38,6 +46,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -46,6 +58,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -54,6 +70,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -62,6 +82,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -70,6 +94,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -78,6 +106,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -86,6 +118,10 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
 
@@ -94,5 +130,57 @@ class NormalizeQuery_test(unittest.TestCase):
         td = Ba.getTableDict()
         q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
         q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
+        if q1 != q2:
+            self.fail("\n" + q1 + "\n" + q2)
+            
+    def test_a11_BUG(self):
+        nr = '11'
+        td = Ba.getTableDict()
+        q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
+        q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
+        if q1 != q2:
+            self.fail("\n" + q1 + "\n" + q2)
+            
+    def test_a12_BUG(self):
+        nr = '12'
+        td = Ba.getTableDict()
+        q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
+        q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
+        if q1 != q2:
+            self.fail("\n" + q1 + "\n" + q2)
+            
+    def test_a13_BUG(self):
+        nr = '13'
+        td = Ba.getTableDict()
+        q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
+        q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
+        if q1 != q2:
+            self.fail("\n" + q1 + "\n" + q2)
+            
+    def test_a14_BUG(self):
+        nr = '14'
+        td = Ba.getTableDict()
+        q1 = He.normalizeSQLQuery(self.readFile("tests/v1/a"+nr+".sql"),td)
+        q2 = He.normalizeSQLQuery(self.readFile("tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
