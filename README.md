@@ -12,7 +12,7 @@ A library that normalizes simple SQL queries and compares them first by equality
 - Fixed linebreak problems: Linebreaks are now converted into whitespaces before parsing where tokens
 
 ### V 0.1.6 + V 0.1.7
-- Fixed import error to ensure imports working in different environemnts
+- Fixed import error to ensure imports working in different environments
 
 ### V 0.1.4 + V 0.1.5
 - V0.1.5 is just a reupload of V 0.1.4
