@@ -6,7 +6,7 @@ A library that normalizes simple SQL queries and compares them first by equality
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml)
 
 ### V 0.1.9 + 0.2.0
-- Support GROUP BY
+- Support ORDER BY
 
 ### V 0.1.8
 - Fixed linebreak problems: Linebreaks are now converted into whitespaces before parsing where tokens
