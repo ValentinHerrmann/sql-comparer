@@ -15,7 +15,6 @@ A library that normalizes simple SQL queries and compares them first by equality
 - Fixed import error to ensure imports working in different environments
 
 ### V 0.1.4 + V 0.1.5
-- V0.1.5 is just a reupload of V 0.1.4
 - Chained conditions (with AND,OR and Paranthesises) in WHERE statement
 
 ### V 0.1.3
