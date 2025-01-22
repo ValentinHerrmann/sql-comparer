@@ -41,7 +41,7 @@ def normalizeSQLQuery(query, baseDict):
 
     formatted_query = []
 
-    # Second pass to process SELECT and WHERE clauses
+    # Second pass to process SELECT, WHERE, GROUP BY, and ORDER BY clauses
     for token in parsed.tokens:
         if token.is_whitespace:
             continue
@@ -51,10 +51,14 @@ def normalizeSQLQuery(query, baseDict):
             formatted_query.append('FROM')  
         elif token.ttype is Keyword and token.value.upper() == 'GROUP BY':
             formatted_query.append('GROUP BY')
+        elif token.ttype is Keyword and token.value.upper() == 'ORDER BY':
+            formatted_query.append('ORDER BY')
         elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'FROM':
             formatted_query.append(Tp._from(token, alias_map, baseDict))
         elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'GROUP BY':
             formatted_query.append(Tp._groupby(token, alias_map, baseDict))
+        elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'ORDER BY':
+            formatted_query.append(Tp._orderby(token, alias_map, baseDict))
         elif isinstance(token, Where):
             formatted_query.append('WHERE')
             formatted_query.append(Tp._where(token, alias_map, baseDict))

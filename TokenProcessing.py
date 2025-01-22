@@ -93,6 +93,16 @@ def _groupby(groupby_, alias_map, baseDict: dict):
     groupby_tokens.sort()
     return ",".join(groupby_tokens)
 
+def _orderby(orderby_, alias_map, baseDict: dict):
+    orderby_tokens = []
+    if isinstance(orderby_, Identifier):
+        orderby_tokens.append(_identifier(orderby_, alias_map, baseDict).lower())
+    elif isinstance(orderby_, IdentifierList):
+        for identifier in orderby_.get_identifiers():
+            orderby_tokens.append(_identifier(identifier, alias_map, baseDict).lower())
+   # orderby_tokens.sort()
+    return ",".join(orderby_tokens)
+
 def _condition(token, alias_map, baseDict: dict):
     left, operator, right = [t for t in token.tokens if not t.is_whitespace]
 
