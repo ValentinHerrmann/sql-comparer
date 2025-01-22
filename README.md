@@ -5,7 +5,7 @@ A library that normalizes simple SQL queries and compares them first by equality
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml)
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml)
 
-### V 0.1.6
+### V 0.1.6 + V 0.1.7
 - Fixed import error to ensure imports working in different environemnts
 
 ### V 0.1.4 + V 0.1.5
