@@ -22,3 +22,6 @@ A library that normalizes simple SQL queries and compares them first by equality
 - FROM: one or more table from DB; no queries as tables!
 - WHERE: single conditions; no Paranthesises!
 - GROUP BY one or more columns
+
+### V 0.2.1
+- Support LIMIT clause

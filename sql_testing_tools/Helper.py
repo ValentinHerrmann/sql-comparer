@@ -41,7 +41,7 @@ def normalizeSQLQuery(query, baseDict):
 
     formatted_query = []
 
-    # Second pass to process SELECT, WHERE, GROUP BY, and ORDER BY clauses
+    # Second pass to process SELECT, WHERE, GROUP BY, ORDER BY, and LIMIT clauses
     for token in parsed.tokens:
         if token.is_whitespace:
             continue
@@ -53,6 +53,8 @@ def normalizeSQLQuery(query, baseDict):
             formatted_query.append('GROUP BY')
         elif token.ttype is Keyword and token.value.upper() == 'ORDER BY':
             formatted_query.append('ORDER BY')
+        elif token.ttype is Keyword and token.value.upper() == 'LIMIT':
+            formatted_query.append('LIMIT')
         elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'FROM':
             formatted_query.append(Tp._from(token, alias_map, baseDict))
         elif (isinstance(token, IdentifierList) or isinstance(token, Identifier)) and formatted_query and formatted_query[-1] == 'GROUP BY':
@@ -66,6 +68,8 @@ def normalizeSQLQuery(query, baseDict):
             if isinstance(token, Function):
                 token = IdentifierList([token])
             formatted_query.append(Tp._select(token, alias_map, baseDict))
+        elif formatted_query and formatted_query[-1] == 'LIMIT':
+            formatted_query.append(Tp._limit(token))
         else:
             formatted_query.append(str(token))
 

@@ -341,29 +341,5 @@ def _where_twoConditionsOnTopLevel(where, alias_map, baseDict: dict, keyword, is
             return keyword.join(current_condition)
 
 
-
-
-# def _where_xx(where, alias_map, baseDict: dict):
-#     where_tokens = []
-#     for token in where.tokens:
-
-#         if isinstance(token, Comparison):
-#             left, operator, right = [t for t in token.tokens if not t.is_whitespace]
-#             left = _identifier(left, alias_map, baseDict)
-#             right = _identifier(right, alias_map, baseDict)
-#             if left.lower() >= right.lower():
-#                 left, right = right, left
-#                 if operator.value == ">":
-#                     operator = "<"
-#                 elif operator.value == "<":
-#                     operator = ">"
-
-#             where_tokens.append(f"{left.lower()} {operator} {right.lower()}")
-#         elif token.ttype is Keyword:
-#             where_tokens.append(token.value.upper())
-#         elif token.is_whitespace or (token.ttype is Keyword and token.value.upper() == "WHERE"):
-#             continue
-#         else:
-#             where_tokens.append(str(token))
-#     return " ".join(where_tokens)
-
+def _limit(limit):
+    return str(limit).strip()
