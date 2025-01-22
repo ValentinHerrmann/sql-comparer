@@ -2,7 +2,12 @@ import sqlparse
 from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis
 from sqlparse.tokens import Keyword, DML, Name, Wildcard, Whitespace
 
-import Helper as He
+try:
+    import Helper as He
+except ImportError:
+    from . import Helper as He
+
+
 
         
 #####################################

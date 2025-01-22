@@ -1,5 +1,9 @@
-import BaseAccess as Ba
-import TokenProcessing as Tp
+try:
+    import BaseAccess as Ba
+    import TokenProcessing as Tp
+except ImportError:
+    from . import BaseAccess as Ba
+    from . import TokenProcessing as Tp
 
 import requests
 import sqlparse
