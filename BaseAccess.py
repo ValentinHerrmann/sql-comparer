@@ -5,16 +5,16 @@ import os
 
 __db=""
 
-def setDBName(name: str):
+def setDBName(path: str):
     global __db
-    print("Setting DB to: " + name)
-    __db = "databases/"+name
-    #with resources.path('sql_testing_tools', name) as db_path:
+    print("Setting DB to: " + path)
+    __db = path
+    #with resources.path('sql_testing_tools', path) as db_path:
     #    __db = str(db_path)
     #    print(__db)
 
 
-setDBName("bayern.db")
+#setDBName("databases/bayern.db")
 
 def run(sql: str):
     con = sqlite3.connect(__db)
