@@ -1,13 +1,11 @@
 import sqlparse
 from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis
-from sqlparse.tokens import Keyword, DML, Name, Wildcard, Whitespace
+from sqlparse.tokens import Keyword, DML, Name, Wildcard, Whitespace, Newline
 
 try:
     import Helper as He
 except ImportError:
     from . import Helper as He
-
-
 
         
 #####################################
@@ -216,10 +214,11 @@ def _where(where, alias_map, baseDict: dict):
 
     isParanthesis = isinstance(where, Parenthesis)
     
+    where_tokens = [token for token in where.tokens if (token.ttype is not Whitespace and token.ttype is not Newline)and token.value != "WHERE"]    
+    where_string = " ".join([str(token) for token in where_tokens])
 
-    and_count = where.normalized.upper().count(" AND ")
-    or_count = where.normalized.upper().count(" OR ")
-
+    and_count = where_string.upper().count(" AND ")
+    or_count  = where_string.upper().count(" OR ")
 
     # No AND / OR
     if and_count + or_count == 0:
@@ -227,11 +226,10 @@ def _where(where, alias_map, baseDict: dict):
 
     # only ANDs / only ORs
     elif and_count == 0 or or_count == 0:
-        return _where_sameStrengthKeywords(where, alias_map, baseDict, " AND " if and_count > 0 else " OR ")
+        return _where_sameStrengthKeywords(where_tokens, alias_map, baseDict, " AND " if and_count > 0 else " OR ")
     
     # ANDs and ORs
 
-    where_tokens = [token for token in where.tokens if token.ttype is not Whitespace and token.value != "WHERE"]    
 
     # count keywords on top level
     top_and_count = count_keywordValues(where_tokens, ["AND"])
@@ -292,9 +290,9 @@ def _where_addBracketsAroundAND(where, alias_map, baseDict: dict):
 
 
 
-def _where_simpleCondition(where, alias_map, baseDict: dict):
+def _where_simpleCondition(where_tokens, alias_map, baseDict: dict):
     cond = []
-    for tok in where.tokens:
+    for tok in where_tokens:
         if isinstance(tok, Comparison):
             cond.append(_condition(tok, alias_map, baseDict))
         elif isinstance(tok, Parenthesis):
@@ -305,9 +303,9 @@ def _where_simpleCondition(where, alias_map, baseDict: dict):
                     tok = _tok
     return "".join(cond)
 
-def _where_sameStrengthKeywords(where, alias_map, baseDict: dict, keyword: str):
+def _where_sameStrengthKeywords(where_tokens, alias_map, baseDict: dict, keyword: str):
     cond = []
-    for tok in where.tokens:
+    for tok in where_tokens:
         if isinstance(tok, Comparison):
             cond.append(_condition(tok, alias_map, baseDict))
         elif isinstance(tok, Parenthesis):
