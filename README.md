@@ -1,9 +1,12 @@
 A library that normalizes simple SQL queries and compares them first by equality of the normalized string and then using the cosette API. 
 
 
+
 ### [Beta in Development!]
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml)
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml)
+
+Submit bug reports and features requests at: https://github.com/ValentinHerrmann/sql_testing_tools
 
 ### V 0.2.1
 - Support LIMIT
