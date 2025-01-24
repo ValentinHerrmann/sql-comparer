@@ -26,6 +26,7 @@ Submit bug reports and features requests at: https://github.com/ValentinHerrmann
 
 ### V 0.1.4 + V 0.1.5
 - Chained conditions (with AND,OR and Paranthesises) in WHERE statement
+- Aggregate Functions
 
 ### V 0.1.3
 - SELECT: columns with our without table prefix
