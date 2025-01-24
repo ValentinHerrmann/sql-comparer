@@ -210,3 +210,15 @@ class NormalizeQuery_test(unittest.TestCase):
             self.fail("\n" + q2 + "\n" + q2)
         if q1 != q2:
             self.fail("\n" + q1 + "\n" + q2)
+
+    def test_a17_LIKE(self):
+        nr = '17'
+        td = Ba.getTableDict()
+        q1 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v1/a"+nr+".sql"),td)
+        q2 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v2/a"+nr+".sql"),td)
+        if q1 != q1:
+            self.fail("\n" + q1 + "\n" + q1)
+        if q2 != q2:
+            self.fail("\n" + q2 + "\n" + q2)
+        if q1 != q2:
+            self.fail("\n" + q1 + "\n" + q2)

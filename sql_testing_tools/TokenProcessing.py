@@ -120,6 +120,10 @@ def _condition(token, alias_map, baseDict: dict):
             operator.value = "<"
         elif operator.value == "<":
             operator.value = ">"
+        elif operator.value == ">=":
+            operator.value = "<="
+        elif operator.value == "<=":
+            operator.value = ">="
         leftLiteral = rightLiteral
         rightLiteral = True
         flipAllowed = False
@@ -133,6 +137,10 @@ def _condition(token, alias_map, baseDict: dict):
             operator = "<"
         elif operator.value == "<":
             operator = ">"
+        if operator.value == ">=":
+            operator = "<="
+        elif operator.value == "<=":
+            operator = ">="
 
     return f"{left if leftLiteral else left.lower()} {operator} {right if rightLiteral else right.lower()}"
 
