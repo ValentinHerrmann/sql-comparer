@@ -8,6 +8,10 @@ A library that normalizes simple SQL queries and compares them first by equality
 
 Submit bug reports and features requests at: https://github.com/ValentinHerrmann/sql_testing_tools
 
+### V 0.2.2 
+- Support LIKE
+- Support '<=' and '>=' (geq and leq)
+
 ### V 0.2.1
 - Support LIMIT
   
