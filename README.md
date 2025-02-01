@@ -8,6 +8,10 @@ A library that normalizes simple SQL queries and compares them first by equality
 
 Submit bug reports and features requests at: https://github.com/ValentinHerrmann/sql_testing_tools
 
+### V 0.2.3
+- fix: ASC/DESC in ORDER BY (also with multiple columns and order directions), no direction treated as ASC
+- Verified that ; and whitespaces, linebreaks at end of query are ignored
+
 ### V 0.2.2 
 - Support LIKE
 - Support '<=' and '>=' (geq and leq)
