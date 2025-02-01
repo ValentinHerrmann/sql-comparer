@@ -1,6 +1,6 @@
 import sqlite3
 import os
-#from importlib import resources
+import importlib
 
 
 __db=""
@@ -9,19 +9,45 @@ def setDBName(path: str):
     global __db
     print("Setting DB to: " + path)
     __db = path
-    #with resources.path('sql_testing_tools', path) as db_path:
-    #    __db = str(db_path)
-    #    print(__db)
 
+def checkDbInResources():
+    global __db
 
-#setDBName("databases/bayern.db")
+    resources = list(importlib.resources.contents('sql_testing_tools.databases'))
+    print("Available resources: " + str(resources))
+
+    newPath = __db.replace("databases/","") 
+
+    if(newPath not in resources):
+        print("Database not in resources. Trying to find '"+ __db +"' in the current directory.")
+        for root, dirs, files in os.walk('.'):
+            for file in files:
+                f = os.path.join(root, file)
+                print(f)
+                if f.endswith(newPath):
+                    print("Database found in current directory.")
+                    return False
+    else:
+        print("Database found in resources.")
+        __db = newPath
+        return True
+
 
 def run(sql: str):
-    con = sqlite3.connect(__db)
-    cur = con.cursor()
-    cur.execute(sql)
-    con.commit()
-    return cur
+    global __db
+    if checkDbInResources():
+        with importlib.resources.path('sql_testing_tools.databases', __db) as db_path:
+            with sqlite3.connect(db_path) as con:
+                cur = con.cursor()
+                cur.execute(sql)
+                con.commit()
+                return cur
+    else:
+        with sqlite3.connect(__db) as con:
+            cur = con.cursor()
+            cur.execute(sql)
+            con.commit()
+            return cur
 
 def runFromFile(path: str):
     sql = getSQLFromFile(path)
