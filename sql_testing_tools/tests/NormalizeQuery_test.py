@@ -32,15 +32,8 @@ class NormalizeQuery_test(unittest.TestCase):
 
     def helperEqual(self, nr:str):
         He.setup("sql_testing_tools/tests/v1/a"+nr+".sql", "sql_testing_tools/tests/v2/a"+nr+".sql")
-        #td = Ba.getTableDict()
-        #q1 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v1/a"+nr+".sql"),td)
-        #q2 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v2/a"+nr+".sql"),td)
-        if He.sql != He.sql:
-            self.fail("\n" + q1 + "\n" + q1)
-        if He.sol != He.sol:
-            self.fail("\n" + q2 + "\n" + q2)
         if He.sol != He.sql:
-            self.fail("\n" + q1 + "\n" + q2)
+            self.fail("\n" + He.sol + "\n" + He.sql)
 
         col = He.checkColumns()
         tab = He.checkTables()
