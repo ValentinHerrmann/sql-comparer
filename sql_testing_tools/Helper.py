@@ -12,6 +12,21 @@ from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function
 from sqlparse.tokens import Keyword, DML, Name, Wildcard
 
 
+sql = ""
+sol = ""
+bd = None
+
+def setup(sqlPath,solPath):
+    global sql, sol, bd    
+    if(bd == None):
+        bd = Ba.getTableDict()
+    if(sqlPath and sqlPath != ""):
+        sql = normalizeSQLQuery(Ba.getSQLFromFile(sqlPath), bd)
+    if(solPath and solPath != ""):
+        sol = normalizeSQLQuery(Ba.getSQLFromFile(solPath), bd)
+    if(sql=='' or sol==''):
+        raise Exception("\n\nSQL-Datei ist leer. Aufgabe wurde noch nicht bearbeitet.")
+    
 
 def normalizeSQLQuery(query, baseDict):
     try:
@@ -75,7 +90,6 @@ def normalizeSQLQuery(query, baseDict):
 
     return " ".join(formatted_query)
 
-
 def findTableForColumn(data_dict, target_value, relevantTables):
     l = []
     for key, value_list in data_dict.items():
@@ -89,7 +103,6 @@ def findTableForColumn(data_dict, target_value, relevantTables):
                 if sublist and sublist[0].lower() == target_value.lower():
                     l.append(key)
     return l
-
 
 def getTableScheme(table_name: str, tableDict: dict):
     tab = tableDict[table_name]
@@ -136,10 +149,52 @@ def buildAndSendCosetteRequest(baseDict, sql, sol):
     return ("ERR", err)
 
 
-def checkColumns(sqlPath, solPath):
-    bd = Ba.getTableDict()
-    sql = normalizeSQLQuery(Ba.getSQLFromFile(sqlPath), bd)
-    sol = normalizeSQLQuery(Ba.getSQLFromFile(solPath), bd)
+def checkKeywords(startWord:str, endWords:list):
+    global sql,sol
+
+    if(startWord not in sol or startWord not in sql):
+        return ""
+
+    if(startWord in sql):
+        start = str.find(sql, startWord)
+        end = -1
+        for kw in endWords:
+            if(str.find(sql, kw) != -1):
+                end = str.find(sql, kw)
+                break
+        if(end == -1):
+            end = len(sql)
+
+        submission = str.strip(sql[start:end])
+        print("'"+submission+"'")
+
+        start = str.find(sol, startWord)
+        end = -1
+        
+        for kw in endWords:
+            if(str.find(sol, kw) != -1):
+                end = str.find(sol, kw)
+                break
+        if(end == -1):
+            end = len(sol)
+
+        solution = str.strip(sol[start:end])
+        print("'"+solution+"'")
+
+        if submission == solution:
+            return ""
+    return "Der '"+startWord+"' Teil der SQL-Abfrage ist nicht korrekt (oder nicht automatisch überprüfbar)."
+
+
+
+
+def checkColumns(sqlPath="", solPath=""):
+    global sql,sol
+    setup(sqlPath, solPath)
+    return checkKeywords("SELECT", ["FROM", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
+
+
+
 
     if("SELECT" in sql and "FROM" in sql):
         start = str.find(sql, "SELECT")
@@ -156,11 +211,13 @@ def checkColumns(sqlPath, solPath):
             return ""
     return "Ausgegebene Spalten sind nicht korrekt (oder nicht automatisch überprüfbar)."
 
+def checkTables(sqlPath="", solPath=""):
+    global sql,sol
+    setup(sqlPath, solPath)
+    return checkKeywords("FROM", ["FROM", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
-def checkTables(sqlPath, solPath):
-    bd = Ba.getTableDict()
-    sql = normalizeSQLQuery(Ba.getSQLFromFile(sqlPath), bd)
-    sol = normalizeSQLQuery(Ba.getSQLFromFile(solPath), bd)
+
+
 
     if("SELECT" in sql and "FROM" in sql):
         endFromKeywords = ["WHERE", "GROUP", "ORDER", "LIMIT", ";"]
@@ -196,13 +253,61 @@ def checkTables(sqlPath, solPath):
             return ""
     return "Verwendete Tabellen sind nicht korrekt (oder nicht automatisch überprüfbar)."
 
+def checkCondition(sqlPath="", solPath=""):
+    global sql,sol
+    setup(sqlPath, solPath)
+    return checkKeywords("WHERE", ["GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
-def checkEquality(sqlPath, solPath):
-    bd = Ba.getTableDict()
-    sql = normalizeSQLQuery(Ba.getSQLFromFile(sqlPath), bd)
-    sol = normalizeSQLQuery(Ba.getSQLFromFile(solPath), bd)
-    if(sql=='' or sol==''):
-        return "\n\nSQL-Datei ist leer. Aufgabe wurde noch nicht bearbeitet."
+def checkOrder(sqlPath="", solPath=""):
+    global sql,sol
+    setup(sqlPath, solPath)
+    return checkKeywords("ORDER BY", ["WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
+
+
+
+    if("ORDER BY" in sql):
+        endFromKeywords = ["WHERE", "GROUP", "LIMIT", ";"]
+
+        start = str.find(sql, "ORDER BY")
+        end = -1
+
+
+        for keyword in endFromKeywords:
+            if(str.find(sql, keyword) != -1):
+                end = str.find(sql, keyword)
+                break
+        if(end == -1):
+            end = len(sql)
+
+        submission = str.strip(sql[start:end])
+        print("'"+submission+"'")
+
+        start = str.find(sol, "ORDER BY")
+        end = -1
+        
+        for keyword in endFromKeywords:
+            if(str.find(sol, keyword) != -1):
+                end = str.find(sol, keyword)
+                break
+        if(end == -1):
+            end = len(sol)
+
+        solution = str.strip(sol[start:end])
+        print("'"+solution+"'")
+
+        if submission == solution:
+            return ""
+    return "Die Sortierung ist nicht korrekt (oder nicht automatisch überprüfbar)."
+
+def checkGroup(sqlPath="", solPath=""):
+    global sql,sol
+    setup(sqlPath, solPath)
+    return checkKeywords("GROUP BY", ["WHERE", "ORDER BY", "LIMIT", ";", "HAVING"])
+
+
+def checkEquality(sqlPath="", solPath=""):
+    global sql,sol
+    setup(sqlPath, solPath)
 
     if(sql==sol):
         return ""

@@ -31,15 +31,24 @@ class NormalizeQuery_test(unittest.TestCase):
             return file.read()
 
     def helperEqual(self, nr:str):
-        td = Ba.getTableDict()
-        q1 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v1/a"+nr+".sql"),td)
-        q2 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v2/a"+nr+".sql"),td)
-        if q1 != q1:
+        He.setup("sql_testing_tools/tests/v1/a"+nr+".sql", "sql_testing_tools/tests/v2/a"+nr+".sql")
+        #td = Ba.getTableDict()
+        #q1 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v1/a"+nr+".sql"),td)
+        #q2 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v2/a"+nr+".sql"),td)
+        if He.sql != He.sql:
             self.fail("\n" + q1 + "\n" + q1)
-        if q2 != q2:
+        if He.sol != He.sol:
             self.fail("\n" + q2 + "\n" + q2)
-        if q1 != q2:
+        if He.sol != He.sql:
             self.fail("\n" + q1 + "\n" + q2)
+
+        col = He.checkColumns()
+        tab = He.checkTables()
+        grp = He.checkGroup()
+        ord = He.checkOrder()
+
+        if(col != "" or tab != "" or grp != "" or ord != ""):
+            self.fail("\n" + col + "\n" + tab + "\n" + grp + "\n" + ord)
             
     def helperUnequal(self, nr:str):
         td = Ba.getTableDict()
