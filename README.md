@@ -4,7 +4,7 @@ A library that normalizes simple SQL queries and compares them first by equality
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-build.yml)
  [![Build and Test](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml/badge.svg)](https://github.com/ValentinHerrmann/sql_testing_tools/actions/workflows/python-unittests.yml)
 
-- Submit bug reports and features requests at: hhts://github.com/ValentinHerrmann/sql_testing_tools
+- Submit bug reports and features requests at: https://github.com/ValentinHerrmann/sql_testing_tools
 - PyPi-Package available at: https://pypi.org/project/sql-testing-tools/ 
 
 
