@@ -2,6 +2,7 @@ import sqlparse
 from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis
 from sqlparse.tokens import Keyword, DML, Name, Wildcard, Whitespace, Newline
 
+
 try:
     import Helper as He
 except ImportError:
@@ -96,10 +97,21 @@ def _groupby(groupby_, alias_map, baseDict: dict):
 def _orderby(orderby_, alias_map, baseDict: dict):
     orderby_tokens = []
     if isinstance(orderby_, Identifier):
-        orderby_tokens.append(_identifier(orderby_, alias_map, baseDict).lower())
+        if len(orderby_.tokens) > 0 and orderby_.tokens[-1].ttype==Keyword.Order:
+            for tok in orderby_.tokens:
+                if isinstance(tok, Identifier):
+                    orderby_tokens.append(_identifier(tok, alias_map, baseDict).lower())
+                if tok.ttype==Keyword.Order:
+                    orderby_tokens[-1] += (" "+tok.value)
+        else:
+            orderby_tokens.append(_identifier(orderby_, alias_map, baseDict).lower())
+            orderby_tokens[-1] += " ASC"
     elif isinstance(orderby_, IdentifierList):
-        for identifier in orderby_.get_identifiers():
-            orderby_tokens.append(_identifier(identifier, alias_map, baseDict).lower())
+        for tok in orderby_.tokens:
+            if isinstance(tok, Identifier):
+                orderby_tokens.append(_identifier(tok, alias_map, baseDict).lower())
+    #elif isinstance(orderby_, Order):
+    #    pass
    # orderby_tokens.sort()
     return ",".join(orderby_tokens)
 
