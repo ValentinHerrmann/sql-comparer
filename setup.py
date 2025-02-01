@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='sql_testing_tools',
-    version='0.2.4.a',
+    version='0.2.5',
     packages=find_packages(),
     install_requires=[
         'sqlparse>=0.5.1',
@@ -15,7 +15,7 @@ setup(
     long_description=description,
     long_description_content_type="text/markdown",
     package_data={
-        'sql_testing_tools.databases': [
+        'sql_testing_tools': [
             'databases/*.db'#, 
             #'./databases/bayern.db', 
             #'./databases/film_fernsehen.db',
