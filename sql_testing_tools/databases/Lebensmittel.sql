@@ -1,6 +1,20 @@
-CREATE DATABASE IF NOT EXISTS Lebensmittel;
-USE Lebensmittel;
-CREATE TABLE IF NOT EXISTS Naehrwert (id INT NOT NULL, name VARCHAR(200), kategorie VARCHAR(200), kilokalorien INT, proteine DOUBLE, wasser DOUBLE, kohlenhydrate DOUBLE, zucker DOUBLE, ballaststoffe DOUBLE, fette DOUBLE, PRIMARY KEY (id));
+
+DROP TABLE Naehrwert;
+CREATE TABLE IF NOT EXISTS Naehrwert (
+    id INT NOT NULL PRIMARY KEY,
+    name VARCHAR(200),
+    kategorie VARCHAR(200),
+    kilokalorien INT,
+    proteine DOUBLE,
+    wasser DOUBLE,
+    kohlenhydrate DOUBLE,
+    zucker DOUBLE,
+    ballaststoffe DOUBLE,
+    fette DOUBLE
+);
+
+
+
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (10533, "Agar Agar", "Verschiedenes/Gelier- und Bindemittel", 160, 2.4, 20.5, 0, NULL, 74.099999999999994, 0.2);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (10536, "Agavensirup", "Süssigkeiten/Zucker und Süssstoffe", 293, 0.2, NULL, 73.099999999999994, NULL, 0, 0);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1478, "Älplermagronen, zubereitet", "Gerichte/Sonstige salzige/rezente Gerichte", 183, 6, 64.8, 18.600000000000001, 1.4, 1.7, 9);
@@ -455,7 +469,7 @@ INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohl
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (210, "Lachs, wild, roh", "Fisch/Meeresfische", 182, 19.7, 65, 0, 0, 0, 11.5);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13354, "Lachs, Zucht, Filet, gedämpft (ohne Zusatz von Fett und Salz)", "Fisch/Meeresfische", 250, 24.9, 58.4, 0, 0, 0, 16.8);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (194, "Lachs, Zucht, roh", "Fisch/Meeresfische", 200, 19.899999999999999, 67, 0, 0, 0, 13.4);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13273, "Lamm, Filet, medium\" gebraten (ohne Zusatz von Fett und Salz)\"", "Fleisch und Innereien/Lamm, Schaf", 150, 27.2, 68.3, 0, 0, 0, 4.5);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13273, "Lamm, Filet, medium' gebraten (ohne Zusatz von Fett und Salz)'", "Fleisch und Innereien/Lamm, Schaf", 150, 27.2, 68.3, 0, 0, 0, 4.5);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (675, "Lamm, Filet, roh", "Fleisch und Innereien/Lamm, Schaf", 112, 20.399999999999999, 75.099999999999994, 0, 0, 0, 3.4);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13304, "Lamm, Gigot, gebraten (ohne Zusatz von Fett und Salz)", "Fleisch und Innereien/Lamm, Schaf", 231, 30.1, 57.6, 0, 0, 0, 12.2);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (4, "Lamm, Gigot, roh (Schweiz, Neuseeland)", "Fleisch und Innereien/Lamm, Schaf", 155, 20.2, 69.099999999999994, 0, 0, 0, 8.1999999999999993);
@@ -683,11 +697,11 @@ INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohl
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1072, "Rind, Brust, gekocht (ohne Zugabe von Fett und Salz)", "Fleisch und Innereien/Rind", 314, 31.5, 47.7, 0, 0, 0, 20.9);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (719, "Rind, Brust, roh", "Fleisch und Innereien/Rind", 188, 18.899999999999999, 67.7, 0, 0, 0, 12.5);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (640, "Rind, Eckstück, roh", "Fleisch und Innereien/Rind", 111, 22.6, 74, 0, 0, 0, 2.2999999999999998);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13258, "Rind, Entrecôte, medium\" gebraten (ohne Zusatz von Fett und Salz)\"", "Fleisch und Innereien/Rind", 183, 31.8, 62.1, 0, 0, 0, 6.2);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13258, "Rind, Entrecôte, medium' gebraten (ohne Zusatz von Fett und Salz)'", "Fleisch und Innereien/Rind", 183, 31.8, 62.1, 0, 0, 0, 6.2);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (720, "Rind, Entrecôte, roh", "Fleisch und Innereien/Rind", 138, 22.3, 71.3, 0, 0, 0, 5.4);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (30, "Rind, Entrecôte, roh (Schweiz)", "Fleisch und Innereien/Rind", 133, 23.2, 71, 0, 0, 0, 4.5);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (31, "Rind, Entrecôte, roh (USA)", "Fleisch und Innereien/Rind", 210, 21.7, 63.2, 0, 0, 0, 13.7);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13262, "Rind, Filet, medium\" gebraten (ohne Zustatz von Fett und Salz)\"", "Fleisch und Innereien/Rind", 140, 29.1, 68.2, 0, 0, 0, 2.6);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13262, "Rind, Filet, medium' gebraten (ohne Zustatz von Fett und Salz)'", "Fleisch und Innereien/Rind", 140, 29.1, 68.2, 0, 0, 0, 2.6);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (639, "Rind, Filet, roh", "Fleisch und Innereien/Rind", 105, 21.9, 75.099999999999994, 0, 0, 0, 2);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1103, "Rindfleisch (Durchschnitt exkl. Innereien, Rippensteak), roh", "Fleisch und Innereien/Rind", 134, 21.4, 73.2, 0, 0, 0, 5.4);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13297, "Rind, Gehacktes, gebraten (ohne Zusatz von Fett und Salz)", "Fleisch und Innereien/Rind", 244, 34.299999999999997, 53.8, 0, 0, 0, 11.9);
@@ -698,10 +712,10 @@ INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohl
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (33, "Rind, Hohrücken, roh (USA)", "Fleisch und Innereien/Rind", 219, 19.3, 61, 0, 0, 0, 15.7);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (657, "Rind, Leber, roh", "Fleisch und Innereien/Rind", 138, 20.5, 69.099999999999994, 5.3, 0, 0, 3.9);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (34, "Rind, Runder Mocken, roh", "Fleisch und Innereien/Rind", 106, 22.4, 73.8, 0, 0, 0, 1.8);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1075, "Rind, Schulter, Braten medium\", im Ofen gebraten (ohne Zugabe von Fett und Salz)\"", "Fleisch und Innereien/Rind", 163, 30, 65.2, 0, 0, 0, 4.8);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1074, "Rind, Schulter, Braten rare\", im Ofen gebraten (ohne Zugabe von Fett und Salz)\"", "Fleisch und Innereien/Rind", 151, 27.7, 67.900000000000006, 0, 0, 0, 4.4000000000000004);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1075, "Rind, Schulter, Braten medium', im Ofen gebraten (ohne Zugabe von Fett und Salz)'", "Fleisch und Innereien/Rind", 163, 30, 65.2, 0, 0, 0, 4.8);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1074, "Rind, Schulter, Braten rare', im Ofen gebraten (ohne Zugabe von Fett und Salz)'", "Fleisch und Innereien/Rind", 151, 27.7, 67.900000000000006, 0, 0, 0, 4.4000000000000004);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (638, "Rind, Schulter, Braten, roh", "Fleisch und Innereien/Rind", 117, 21.6, 73.8, 0, 0, 0, 3.5);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1076, "Rind, Schulter, Braten well done\", im Ofen gebraten (ohne Zugabe von Fett und Salz)\"", "Fleisch und Innereien/Rind", 189, 34.799999999999997, 59.6, 0, 0, 0, 5.6);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1076, "Rind, Schulter, Braten well done', im Ofen gebraten (ohne Zugabe von Fett und Salz)'", "Fleisch und Innereien/Rind", 189, 34.799999999999997, 59.6, 0, 0, 0, 5.6);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13291, "Rind, Siedfleisch, durchzogen, gekocht (ohne Zusatz von Fett und Salz)", "Fleisch und Innereien/Rind", 345, 29.5, 45.3, 0, 0, 0, 25.2);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (35, "Rind, Siedfleisch, durchzogen,  roh", "Fleisch und Innereien/Rind", 227, 19.5, 61.7, 0, 0, 0, 16.600000000000001);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (13292, "Rind, Siedfleisch, mager, gekocht (ohne Zusatz von Fett and Salz)", "Fleisch und Innereien/Rind", 221, 34.5, 56.3, 0, 0, 0, 9.1999999999999993);
@@ -744,7 +758,7 @@ INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohl
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1603, "Rührei mit Kräutern, zubereitet", "Gerichte/Sonstige salzige/rezente Gerichte", 142, 10.3, 77.099999999999994, 1.8, 1.6, 0.4, 10.4);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1606, "Rührei mit Schinken, zubereitet", "Gerichte/Sonstige salzige/rezente Gerichte", 146, 12.6, 76.099999999999994, 1.3, 1.3, 0, 10);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1602, "Rührei, zubereitet", "Gerichte/Sonstige salzige/rezente Gerichte", 149, 10.8, 76.599999999999994, 1.3, 1.3, 0, 11.2);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (901, "Rührteigcake Gleichschwer\"\"", "Süssigkeiten/Kuchen, Torten und Cake", 431, 6.7, 23.1, 44.8, 26.7, 0.9, 24.8);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (901, "Rührteigcake Gleichschwer''", "Süssigkeiten/Kuchen, Torten und Cake", 431, 6.7, 23.1, 44.8, 26.7, 0.9, 24.8);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1607, "Russischer Salat, zubereitet", "Gerichte/Salate", 198, 2.6, 69.3, 9.9, 1.9, 2.2999999999999998, 15.9);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (875, "Sablé, Butter", "Süssigkeiten/Guetzli", 474, 5.9, 13.8, 53.1, 17.8, 1.6, 26.2);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (783, "Salametti", "Fleisch- und Wurstwaren/Rohwurstware", 343, 14.8, 53.5, 0.3, 0.3, 0, 31.4);
@@ -830,9 +844,9 @@ INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohl
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (42, "Schwein, Nierstück, roh", "Fleisch und Innereien/Schwein", 138, 22.9, 69.5, 0, 0, 0, 5.0999999999999996);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (43, "Schwein, Runder Mocken, roh", "Fleisch und Innereien/Schwein", 127, 20.6, 73.599999999999994, 0, 0, 0, 4.9000000000000004);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1085, "Schweinsbratwurst", "Fleisch- und Wurstwaren/Brühwurstware", 236, 16.2, 61.8, 0.5, 0.5, 0, 18.8);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1077, "Schwein, Schulter, Braten medium\", im Ofen gebraten (ohne Zugabe von Fett und Salz)\"", "Fleisch und Innereien/Schwein", 229, 31.2, 57.3, 0, 0, 0, 11.6);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1077, "Schwein, Schulter, Braten medium', im Ofen gebraten (ohne Zugabe von Fett und Salz)'", "Fleisch und Innereien/Schwein", 229, 31.2, 57.3, 0, 0, 0, 11.6);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (676, "Schwein, Schulter, Braten, roh", "Fleisch und Innereien/Schwein", 181, 24.6, 62.9, 0, 0, 0, 9.1999999999999993);
-INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1079, "Schwein, Schulter, Braten well done\", im Ofen gebraten (ohne Zugabe von Fett und Salz)\"", "Fleisch und Innereien/Schwein", 292, 39.700000000000003, 45.5, 0, 0, 0, 14.8);
+INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1079, "Schwein, Schulter, Braten well done', im Ofen gebraten (ohne Zugabe von Fett und Salz)'", "Fleisch und Innereien/Schwein", 292, 39.700000000000003, 45.5, 0, 0, 0, 14.8);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1668, "Schweinspiccata, zubereitet", "Gerichte/Sonstige salzige/rezente Gerichte", 232, 23.6, 57.9, 5.5, 0.1, 0.3, 12.7);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1671, "Schweinsragout mit Sauce, zubereitet", "Gerichte/Sonstige salzige/rezente Gerichte", 113, 12.4, 78.400000000000006, 3.1, 1.6, 0.6, 5.5);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1086, "Schweinswurst", "Fleisch- und Wurstwaren/Brühwurstware", 268, 16.2, 57.8, 0.5, 0.5, 0, 22.4);
@@ -1019,3 +1033,6 @@ INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohl
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1615, "Zwiebelkuchen, gebacken (mit Blätterteig)", "Gerichte/Kuchen und Gratins", 178, 4.7, 69.2, 13.2, 5.0999999999999996, 1.5, 11.5);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (1616, "Zwiebelkuchen, gebacken (mit Kuchenteig)", "Gerichte/Kuchen und Gratins", 181, 5, 67.599999999999994, 15.3, 5.0999999999999996, 1.6, 10.7);
 INSERT INTO Naehrwert (id, name, kategorie, kilokalorien, proteine, wasser, kohlenhydrate, zucker, ballaststoffe, fette) VALUES (368, "Zwiebel, roh", "Gemüse/Gemüse frisch", 39, 1.3, 89, 7, 7, 1.8, 0.2);
+
+
+COMMIT;
