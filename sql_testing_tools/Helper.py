@@ -152,7 +152,7 @@ def buildAndSendCosetteRequest(baseDict, sql, sol):
 def checkKeywords(startWord:str, endWords:list):
     global sql,sol
 
-    if(startWord not in sol or startWord not in sql):
+    if(startWord not in sol and startWord not in sql):
         return ""
 
     if(startWord in sql):
@@ -298,6 +298,7 @@ def checkOrder(sqlPath="", solPath=""):
         if submission == solution:
             return ""
     return "Die Sortierung ist nicht korrekt (oder nicht automatisch überprüfbar)."
+
 
 def checkGroup(sqlPath="", solPath=""):
     global sql,sol
