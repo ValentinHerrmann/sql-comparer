@@ -127,7 +127,7 @@ res = checkEquality()
 ### Changelog
 
 ##### V 0.2.5
-- Added support for [dbiu.de](https://www.datenbanken-im-unterricht.de/catalog.php) databases 1-18 (loaded via [dbiu_databases](github.com/ValentinHerrmann/dbiu_databases)) with option to still load DBs from local repo.
+- Added support for [dbiu.de](https://www.datenbanken-im-unterricht.de/catalog.php) databases 1-18 (loaded via [dbiu_databases](https://github.com/ValentinHerrmann/dbiu_databases)) with option to still load DBs from local repo.
 - Improved docs
 
 ##### V 0.2.4
