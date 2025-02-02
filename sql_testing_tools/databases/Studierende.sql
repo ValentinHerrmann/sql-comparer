@@ -4,14 +4,30 @@
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
+BEGIN;
 
 CREATE DATABASE IF NOT EXISTS Studierende;
 USE Studierende;
 
 CREATE TABLE Studiengang (
   schluessel char(5) NOT NULL,
-  beschreibung varchar(200) NOT NULL
+  beschreibung varchar(200) NOT NULL,
+  PRIMARY KEY (schluessel)
 ) ;
+CREATE TABLE Studierende (
+     studiengang_schluessel char(5) NOT NULL,
+     jahr int(11) NOT NULL,
+     deutsch_m int(11) NOT NULL,
+     deutsch_w int(11) NOT NULL,
+     auslaendisch_m int(11) NOT NULL,
+     auslaendisch_w int(11) NOT NULL,
+     PRIMARY KEY (studiengang_schluessel,jahr),
+     CONSTRAINT studiengang_studierende FOREIGN KEY (studiengang_schluessel) REFERENCES Studiengang (schluessel)
+) ;
+
+COMMIT;
+
+BEGIN;
 
 INSERT INTO Studiengang (schluessel, beschreibung) VALUES
 ('SF001', 'Ägyptologie'),
@@ -305,14 +321,7 @@ INSERT INTO Studiengang (schluessel, beschreibung) VALUES
 ('SF545', 'Kath. Religionspäd., kirchliche Bildungsarbeit'),
 ('SF548', 'Ur- und Frühgeschichte');
 
-CREATE TABLE Studierende (
-  studiengang_schluessel char(5) NOT NULL,
-  jahr int(11) NOT NULL,
-  deutsch_m int(11) NOT NULL,
-  deutsch_w int(11) NOT NULL,
-  auslaendisch_m int(11) NOT NULL,
-  auslaendisch_w int(11) NOT NULL
-) ;
+
 
 INSERT INTO Studierende (studiengang_schluessel, jahr, deutsch_m, deutsch_w, auslaendisch_m, auslaendisch_w) VALUES
 ('SF001', 1998, 427, 666, 40, 34),
@@ -6991,15 +7000,6 @@ INSERT INTO Studierende (studiengang_schluessel, jahr, deutsch_m, deutsch_w, aus
 ('SF548', 2020, 455, 518, 41, 49);
 
 
-ALTER TABLE Studiengang
-  ADD PRIMARY KEY (schluessel);
-
-ALTER TABLE Studierende
-  ADD PRIMARY KEY (studiengang_schluessel,jahr);
-
-
-ALTER TABLE Studierende
-  ADD CONSTRAINT studiengang_studierende FOREIGN KEY (studiengang_schluessel) REFERENCES Studiengang (schluessel);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
