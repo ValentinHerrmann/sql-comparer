@@ -13,15 +13,5 @@ setup(
         'requests>=2.32.3'
     ],
     long_description=description,
-    long_description_content_type="text/markdown",
-    package_data={
-        'sql_testing_tools': [
-            'databases/*.db'#, 
-            #'./databases/bayern.db', 
-            #'./databases/film_fernsehen.db',
-            #'./databases/ladepunkte.db',
-            #'./databases/straftaten.db',
-            ]
-    },
-    include_package_data=True
+    long_description_content_type="text/markdown"
 )

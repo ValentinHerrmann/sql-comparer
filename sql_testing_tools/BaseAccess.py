@@ -3,51 +3,60 @@ import os
 import importlib
 
 
+
+dbMap = {
+    "dbiu.bahn":1,
+    "dbiu.bahn":2,
+    "dbiu.bundestag": 3,
+    "dbiu.bundestag_einfach": 4,
+    "dbiu.film_fernsehen": 5,
+    "dbiu.haushaltsausstattung": 6,
+    "dbiu.straftaten": 7,
+    "dbiu.straftaten_einfach": 8,
+    "dbiu.kunstsammlung": 9,
+    "dbiu.ladepunkte": 10,
+    "dbiu.laenderspiele": 11,
+    "dbiu.lebensmittel": 12,
+    "dbiu.schulstatistik": 13,
+    "dbiu.studierende": 14,
+    "dbiu.unfallstatistik": 15,
+    "dbiu.videospiele_einfach": 16,
+    "dbiu.videospiele": 17,
+    "dbiu.wetterdaten": 18
+}
+
 __db=""
 
 def setDBName(path: str):
     global __db
+
+    if(path.startswith("dbiu.")):
+        dbVersion = dbMap.get(path)
+        if(dbVersion is not None):
+            os.system('pip install dbiu_databases=='+dbVersion)
+            try:
+                import dbiu_databases
+            except ImportError:
+                print('pip install dbiu_databases=='+dbVersion+' failed')
     print("Setting DB to: " + path)
     __db = path
 
-def checkDbInResources():
-    global __db
-
-    resources = list(importlib.resources.contents('sql_testing_tools.databases'))
-    print("Available resources: " + str(resources))
-
-    newPath = __db.replace("databases/","") 
-
-    if(newPath not in resources):
-        print("Database not in resources. Trying to find '"+ __db +"' in the current directory.")
-        for root, dirs, files in os.walk('.'):
-            for file in files:
-                f = os.path.join(root, file)
-                print(f)
-                if f.endswith(newPath):
-                    print("Database found in current directory.")
-                    return False
-    else:
-        print("Database found in resources.")
-        __db = newPath
-        return True
-
-
+    
 def run(sql: str):
     global __db
-    if checkDbInResources():
-        with importlib.resources.path('sql_testing_tools.databases', __db) as db_path:
-            with sqlite3.connect(db_path) as con:
-                cur = con.cursor()
-                cur.execute(sql)
-                con.commit()
-                return cur
+
+    if __db.startswith("dbiu.") and not __db.endswith(".db"):
+        with importlib.resources.path('dbiu_databases', "base.db") as db_path:
+            return __run(sql, db_path)
     else:
-        with sqlite3.connect(__db) as con:
-            cur = con.cursor()
-            cur.execute(sql)
-            con.commit()
-            return cur
+        return __run(sql, __db)
+
+def __run(sql: str, db: str):
+    with sqlite3.connect(db) as con:
+        cur = con.cursor()
+        cur.execute(sql)
+        con.commit()
+        return cur
 
 def runFromFile(path: str):
     sql = getSQLFromFile(path)
