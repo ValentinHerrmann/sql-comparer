@@ -152,7 +152,7 @@ def buildAndSendCosetteRequest(baseDict, sql, sol):
 def checkKeywords(startWord:str, endWords:list):
     global sql,sol
 
-    if(startWord not in sol or startWord not in sql):
+    if(startWord not in sol and startWord not in sql):
         return ""
 
     if(startWord in sql):
@@ -186,30 +186,11 @@ def checkKeywords(startWord:str, endWords:list):
     return "Der '"+startWord+"' Teil der SQL-Abfrage ist nicht korrekt (oder nicht automatisch überprüfbar)."
 
 
-
-
 def checkColumns(sqlPath="", solPath=""):
     global sql,sol
     setup(sqlPath, solPath)
     return checkKeywords("SELECT", ["FROM", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
-
-
-
-    if("SELECT" in sql and "FROM" in sql):
-        start = str.find(sql, "SELECT")
-        end = str.find(sql, "FROM")
-        submission = str.strip(sql[start:end])
-        print("'"+submission+"'")
-
-        start = str.find(sol, "SELECT")
-        end = str.find(sol, "FROM")
-        solution = str.strip(sol[start:end])
-        print("'"+solution+"'")
-
-        if submission == solution:
-            return ""
-    return "Ausgegebene Spalten sind nicht korrekt (oder nicht automatisch überprüfbar)."
 
 def checkTables(sqlPath="", solPath=""):
     global sql,sol
@@ -217,87 +198,17 @@ def checkTables(sqlPath="", solPath=""):
     return checkKeywords("FROM", ["FROM", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
 
-
-
-    if("SELECT" in sql and "FROM" in sql):
-        endFromKeywords = ["WHERE", "GROUP", "ORDER", "LIMIT", ";"]
-
-        start = str.find(sql, "FROM")
-        end = -1
-
-
-        for keyword in endFromKeywords:
-            if(str.find(sql, keyword) != -1):
-                end = str.find(sql, keyword)
-                break
-        if(end == -1):
-            end = len(sql)
-
-        submission = str.strip(sql[start:end])
-        print("'"+submission+"'")
-
-        start = str.find(sol, "FROM")
-        end = -1
-        
-        for keyword in endFromKeywords:
-            if(str.find(sol, keyword) != -1):
-                end = str.find(sol, keyword)
-                break
-        if(end == -1):
-            end = len(sol)
-
-        solution = str.strip(sol[start:end])
-        print("'"+solution+"'")
-
-        if submission == solution:
-            return ""
-    return "Verwendete Tabellen sind nicht korrekt (oder nicht automatisch überprüfbar)."
-
 def checkCondition(sqlPath="", solPath=""):
     global sql,sol
     setup(sqlPath, solPath)
     return checkKeywords("WHERE", ["GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
+
 
 def checkOrder(sqlPath="", solPath=""):
     global sql,sol
     setup(sqlPath, solPath)
     return checkKeywords("ORDER BY", ["WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
-
-
-    if("ORDER BY" in sql):
-        endFromKeywords = ["WHERE", "GROUP", "LIMIT", ";"]
-
-        start = str.find(sql, "ORDER BY")
-        end = -1
-
-
-        for keyword in endFromKeywords:
-            if(str.find(sql, keyword) != -1):
-                end = str.find(sql, keyword)
-                break
-        if(end == -1):
-            end = len(sql)
-
-        submission = str.strip(sql[start:end])
-        print("'"+submission+"'")
-
-        start = str.find(sol, "ORDER BY")
-        end = -1
-        
-        for keyword in endFromKeywords:
-            if(str.find(sol, keyword) != -1):
-                end = str.find(sol, keyword)
-                break
-        if(end == -1):
-            end = len(sol)
-
-        solution = str.strip(sol[start:end])
-        print("'"+solution+"'")
-
-        if submission == solution:
-            return ""
-    return "Die Sortierung ist nicht korrekt (oder nicht automatisch überprüfbar)."
 
 def checkGroup(sqlPath="", solPath=""):
     global sql,sol
@@ -306,17 +217,17 @@ def checkGroup(sqlPath="", solPath=""):
 
 
 def checkEquality(sqlPath="", solPath=""):
-    global sql,sol
+    global sql, sol
     setup(sqlPath, solPath)
 
-    if(sql==sol):
+    if sql == sol:
         return ""
 
     result = buildAndSendCosetteRequest(bd, sql, sol)
 
-    if(result[0] == "ERR"):
+    if result[0] == "ERR":
         return "\n\nFehler bei der automatischen Überprüfung der Abgabe. Es kann keine Aussage über die Korrektheit der Abgabe getroffen werden."
-    elif(result[0] != "EQ"):
+    elif result[0] != "EQ":
         return "\n\nDie Abgabe stimmt nicht mit der Musterlösung überein."
     return ""
 

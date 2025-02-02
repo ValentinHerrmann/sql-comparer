@@ -168,3 +168,10 @@ class NormalizeQuery_test(unittest.TestCase):
     def test_a21_OrderBy_AscDesc_Unequal(self):
         nr='21'
         self.helperUnequal(nr)
+
+    def test_a22_GroupIsolated(self):
+        nr='22'
+        res = He.checkGroup("sql_testing_tools/tests/v1/a"+nr+".sql", "sql_testing_tools/tests/v2/a"+nr+".sql")
+
+        if res == "":
+            self.fail("Different grouping not recognized")
