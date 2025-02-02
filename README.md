@@ -9,7 +9,7 @@ A library that normalizes simple SQL queries and compares them first by equality
 
 
 ### Included SQLite Databases
-The following Databases are based on [datenbanken-im-unterricht.de](https://www.datenbanken-im-unterricht.de/catalog.php)
+The following Databases are based on [datenbanken-im-unterricht.de](https://www.datenbanken-im-unterricht.de/catalog.php) / [dbiu.de](https://www.dbiu.de/)
 and can be used by calling `Ba.setDBName("DBName.db")` at the beginning of your test class.
 - `bahn.db`: https://www.dbiu.de/bahn
 - `bayern.db`: https://www.dbiu.de/bayern
@@ -43,8 +43,7 @@ import sql_testing_tools.BaseAccess as Ba
 import sql_testing_tools.Helper as He
 ```
 
-On global level of your test class, set the SQLite database you want to use (choose one of the DBs in the package by name or 
-one located in your test repository with full path).
+On global level of your test class, set the SQLite database you want to use (choose one of the DBs in the package by name or one located in your test repository with full path).
 ``` python
 import unittest 
 class TestClass(unittest.TestCase):
@@ -72,7 +71,6 @@ setup("sqlfile.sql","solution.sql")
 # arguments to keep the last normalized sql strings (and improve performance). 
 # Each check was successfull if "" is returned. Returns a German error message if not.
 # Each method compares the normalized string between the start keyword and the next keyword or ;
-
 res = He.checkColumns() # starts at "SELECT"
 res = He.checkTables() # starts at "FROM"
 res = He.checkCondition() # starts at "WHERE"
@@ -99,7 +97,10 @@ res = checkEquality()
 
 ### Changelog
 
-##### V0.2.4
+##### V 0.2.5
+- Added Databases from dbiu.de to the compiled package with option to still load DBs from test repo
+
+##### V 0.2.4
 - Added more check methods for single parts of queries: checkColumns, checkTables, checkCondition, checkOrder, checkGroup, checkKeywords
 
 ##### V 0.2.3
