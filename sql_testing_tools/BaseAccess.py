@@ -6,7 +6,7 @@ import importlib
 
 dbMap = {
     "dbiu.bahn":1,
-    "dbiu.bahn":2,
+    "dbiu.bayern":2,
     "dbiu.bundestag": 3,
     "dbiu.bundestag_einfach": 4,
     "dbiu.film_fernsehen": 5,
@@ -27,19 +27,27 @@ dbMap = {
 
 __db=""
 
-def setDBName(path: str):
+def setDBName(database):
     global __db
 
-    if(path.startswith("dbiu.")):
-        dbVersion = dbMap.get(path)
-        if(dbVersion is not None):
-            os.system('pip install dbiu_databases=='+dbVersion)
-            try:
-                import dbiu_databases
-            except ImportError:
-                print('pip install dbiu_databases=='+dbVersion+' failed')
-    print("Setting DB to: " + path)
-    __db = path
+    if isinstance(database, str) and database.startswith("dbiu."):
+        dbVersion = dbMap.get(database)
+    elif isinstance(database, int):
+        dbVersion = database
+        database = "dbiu."+str(database)
+    elif isinstance(database, str):
+        dbVersion = None
+    else:
+        raise Exception("Invalid database selected")
+        
+    if(dbVersion is not None):
+        os.system('pip install dbiu_databases=='+str(dbVersion))
+        try:
+            import dbiu_databases
+        except ImportError:
+            raise Exception("Invalid database selected")
+    print("Setting DB to: " + database)
+    __db = database
 
     
 def run(sql: str):

@@ -11,7 +11,7 @@ import BaseAccess as Ba
 import Helper as He
 
 
-Ba.setDBName("sql_testing_tools/databases/bayern.db")
+Ba.setDBName("dbiu.bayern")
 
 
 class NormalizeQuery_test(unittest.TestCase):
