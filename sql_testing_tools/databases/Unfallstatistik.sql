@@ -2,6 +2,7 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 
 SET time_zone = "+00:00";
 
+BEGIN;
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -14,8 +15,12 @@ CREATE TABLE Unfaelle (
   verkehrsbeteiligung varchar(50) NOT NULL,
   fehlverhalten varchar(100) NOT NULL,
   jahr int(4) NOT NULL,
-  anzahl int(11) NOT NULL
+  anzahl int(11) NOT NULL,
+  PRIMARY KEY (verkehrsbeteiligung,fehlverhalten,jahr)
 ) ;
+
+COMMIT;
+BEGIN;
 
 INSERT INTO Unfaelle (verkehrsbeteiligung, fehlverhalten, jahr, anzahl) VALUES
 ('Andere Fahrzeuge', 'Abstandsfehler', 2008, 148),
@@ -2265,9 +2270,7 @@ INSERT INTO Unfaelle (verkehrsbeteiligung, fehlverhalten, jahr, anzahl) VALUES
 ('Übrige Kraftfahrzeuge', 'Unzul. Halten/Parken, mangelnde Verkehrssicherung', 2019, 17),
 ('Übrige Kraftfahrzeuge', 'Unzul. Halten/Parken, mangelnde Verkehrssicherung', 2020, 25);
 
-
-ALTER TABLE Unfaelle
-  ADD PRIMARY KEY (verkehrsbeteiligung,fehlverhalten,jahr);
+;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
