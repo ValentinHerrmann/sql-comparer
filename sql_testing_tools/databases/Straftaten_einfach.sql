@@ -10,8 +10,11 @@ SET time_zone = "+00:00";
 CREATE DATABASE IF NOT EXISTS Kriminalstatistik;
 USE Kriminalstatistik;
 
+
+BEGIN;
+
 CREATE TABLE Straftaten (
-  schluessel char(6) NOT NULL,
+  schluessel char(6) NOT NULL PRIMARY KEY,
   typ varchar(100) DEFAULT NULL,
   oberkategorie varchar(100) DEFAULT NULL,
   unterkategorie varchar(100) DEFAULT NULL,
@@ -702,8 +705,6 @@ INSERT INTO Straftaten (schluessel, typ, oberkategorie, unterkategorie, bezeichn
 ('744200', 'Strafrechtliche Nebengesetze', 'Straftaten gegen strafrechtliche Nebengesetze auf dem Umwelt- und Verbraucherschutzsektor (neben Sch', 'Straftaten nach dem Abfallverbringungsgesetz (AbfVerbrG)', 'Illegale Verbringung nichtgefährlicher Abfälle § 18b AbfVerbrG', 5, 0, 5, 0, 0, 5, 4, 1, 0);
 
 
-ALTER TABLE Straftaten
-  ADD PRIMARY KEY (schluessel);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
