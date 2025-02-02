@@ -8,6 +8,27 @@ A library that normalizes simple SQL queries and compares them first by equality
 - PyPi-Package available at: https://pypi.org/project/sql-testing-tools/ 
 
 
+### Included SQLite Databases
+The following Databases are based on [datenbanken-im-unterricht.de](https://www.datenbanken-im-unterricht.de/catalog.php)
+and can be used by calling `Ba.setDBName("DBName.db")` at the beginning of your test class.
+- `bahn.db`: https://www.dbiu.de/bahn
+- `bayern.db`: https://www.dbiu.de/bayern
+- `bundestag.db`: https://www.datenbanken-im-unterricht.de/downloads/bundestag.zip
+- `bundestag_einfach.db`: https://www.dbiu.de/bundestagsmitglieder
+- `film_fernsehen.db`: https://www.dbiu.de/filmundfernsehen
+- `haushaltsausstattung.db`: https://www.dbiu.de/haushaltsausstattung
+- `straftaten.db`: https://www.datenbanken-im-unterricht.de/downloads/kriminalstatistik-erweitert.zip
+- `straftaten_einfach.db`: https://www.dbiu.de/kriminalstatistik
+- `kunstsammlung.db`: https://www.dbiu.de/kunstsammlung
+- `ladepunkte.db`: https://www.dbiu.de/ladepunkte
+- `laenderspiele.db`: https://www.dbiu.de/laenderspiele
+- `lebensmittel.db`: https://www.dbiu.de/lebensmittel
+- `schulstatistik.db`: https://www.dbiu.de/schulstatistik
+- `studierende.db`: https://www.dbiu.de/studierende
+- `unfallstatistik.db`: https://www.dbiu.de/unfallstatistik
+- `videospiele_einfach.db`: https://www.dbiu.de/videospiele
+- `videospiele.db`: https://www.dbiu.de/videospiele2
+- `wetterdaten.db`: https://www.dbiu.de/wetterdaten
 
 ### Getting started
 
@@ -22,15 +43,17 @@ import sql_testing_tools.BaseAccess as Ba
 import sql_testing_tools.Helper as He
 ```
 
-On global level of your test class, set the SQLite database you want to use (bases must be located in the repository of the test class, no DBs contained in sql_testing_tools).
+On global level of your test class, set the SQLite database you want to use (choose one of the DBs in the package by name or 
+one located in your test repository with full path).
 ``` python
 import unittest 
 class TestClass(unittest.TestCase):
-    Ba.setDBName("databases/ladepunkte.db") 
+    Ba.setDBName("ladepunkte.db") 
 ```
 
 The following methods are available for use in test methods:
 ``` python
+# Run the query to find out if syntax/database errors occur.
 try:
     Ba.runAndGetStringTable_fromFile("sqlfile.sql")
 except Exception as e:
@@ -38,37 +61,31 @@ except Exception as e:
     # (usually due to syntax or database errors)
     self.fail(e)
 
-# (optional) set the files to be compared. The sql strings will 
-# be normalized and used for all following methods (to improve 
-# performance), until new  files are set. Arguments that are
-# None or "" are ignored and the sql string remains the same.
-# Raises an Exception if one of the files is empty.
+# (optional) 
+# set the files to be compared. The sql strings will  be normalized and used 
+# for all following methods (to improve performance), until new  files are set. Arguments 
+# that are None or "" are ignored and the sql string remains the same. Raises an Exception 
+# if one of the files is empty. 
 setup("sqlfile.sql","solution.sql")
 
-# All following methods call setup(sql,sol) before executing 
-# anything else. Call without arguments to keep the last 
-# normalized sql strings (and improve performance).
-# Each check was successfull if "" is returned. Returns a 
-# German error message if not.
-# Each method compares the normalized string between the start
-# keyword and the next keyword or ;
+# All following methods call setup(sql,sol) before executing anything else. Call without 
+# arguments to keep the last normalized sql strings (and improve performance). 
+# Each check was successfull if "" is returned. Returns a German error message if not.
+# Each method compares the normalized string between the start keyword and the next keyword or ;
 
-res = He.checkColumns() # starts to search at keyword "SELECT"
-res = He.checkTables() # starts to search at keyword "FROM"
-res = He.checkCondition() # starts to search at keyword "WHERE"
-res = He.checkOrder() # starts to search at keyword "ORDER BY"
-res = He.checkGroup() # starts to search at keyword "GROUP BY"
+res = He.checkColumns() # starts at "SELECT"
+res = He.checkTables() # starts at "FROM"
+res = He.checkCondition() # starts at "WHERE"
+res = He.checkOrder() # starts at "ORDER BY"
+res = He.checkGroup() # starts at "GROUP BY"
 
-# can not be called with new sql files
+# can not be called with new sql files, can be used for individual checks. Usually not necessary.
 res = checkKeywords("startKeyword",["end","keywords"]) 
 
-# compares equality of the full normalized sql strings and if 
-# not equal uses the Cosette API (cosette.cs.washington.edu)
-# for comparison. A file 'cosette_apikey.txt' with only the 
-# apikey in it on root level of the test repository is required 
-# to use this feature. If not existant, only the string comparison
-# is performed.
-# Warning: Cosette is not maintained!
+# compares equality of the full normalized sql strings and if not equal uses the Cosette API 
+(cosette.cs.washington.edu) for comparison. A file 'cosette_apikey.txt' with only the apikey in it 
+on root level of the test repository is required to use this feature. If not existant, only the 
+# string comparison is performed. Warning: Cosette is not maintained!
 res = checkEquality()
 ```
 
