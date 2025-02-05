@@ -195,3 +195,27 @@ class NormalizeQuery_test(unittest.TestCase):
     def test_a25_anton(self):
         nr = '25'
         self.helperEqual(nr)
+
+    def test_a26_anton2(self):
+        nr = '26'
+        self.helperEqual(nr)
+
+    def test_a27_detailCheckWrongOrder(self):
+        nr = '27'
+        He.setup("sql_testing_tools/tests/v1/a"+nr+".sql", "sql_testing_tools/tests/v2/a"+nr+".sql")
+
+        col = He.checkColumns()
+        tab = He.checkTables()
+        grp = He.checkGroup()
+        ord = He.checkOrder()
+
+        msg = "\n\n"
+
+        if(col==""):
+            msg += "Spalten werden als richtig angezeigt, obwohl falsch\n"
+
+        if(tab != "" or grp != "" or ord != ""):
+            msg += tab + "\n" + grp + "\n" + ord
+
+        if msg != "\n\n":
+            self.fail(msg)

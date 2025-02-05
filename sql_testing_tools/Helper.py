@@ -152,34 +152,35 @@ def buildAndSendCosetteRequest(baseDict, sql, sol):
 def checkKeywords(startWord:str, endWords:list):
     global sql,sol
 
-    if(startWord not in sol and startWord not in sql):
+    startWord = startWord.lower()
+
+    if(startWord not in sol.lower() and startWord not in sql.lower()):
         return ""
 
-    if(startWord in sql):
-        start = str.find(sql, startWord)
+    if(startWord in sql.lower()):
+        start = sql.lower().find(startWord) + len(startWord)
         end = -1
         for kw in endWords:
-            if(str.find(sql, kw) != -1):
-                end = str.find(sql, kw)
-                break
+            index = sql.lower().find(kw.lower(), start)
+            if -1 < index < end or end == -1:
+                end = index
         if(end == -1):
             end = len(sql)
 
         submission = str.strip(sql[start:end])
         #print("'"+submission+"'")
 
-        start = str.find(sol, startWord)
+        start = sol.lower().find(startWord) + len(startWord)
         end = -1
         
         for kw in endWords:
-            if(str.find(sol, kw) != -1):
-                end = str.find(sol, kw)
-                break
+            index = sol.lower().find(kw.lower(), start)
+            if -1 < index < end or end == -1:
+                end = index
         if(end == -1):
             end = len(sol)
 
         solution = str.strip(sol[start:end])
-        #print("'"+solution+"'")
 
         if submission == solution:
             return ""
@@ -189,31 +190,31 @@ def checkKeywords(startWord:str, endWords:list):
 def checkColumns(sqlPath="", solPath=""):
     global sql,sol
     setup(sqlPath, solPath)
-    return checkKeywords("SELECT", ["FROM", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
+    return checkKeywords("SELECT ", ["FROM", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
 
 def checkTables(sqlPath="", solPath=""):
     global sql,sol
     setup(sqlPath, solPath)
-    return checkKeywords("FROM", ["FROM", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
+    return checkKeywords("FROM ", ["SELECT", "WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
 
 def checkCondition(sqlPath="", solPath=""):
     global sql,sol
     setup(sqlPath, solPath)
-    return checkKeywords("WHERE", ["GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
+    return checkKeywords("WHERE ", ["SELECT", "FROM", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
 
 def checkOrder(sqlPath="", solPath=""):
     global sql,sol
     setup(sqlPath, solPath)
-    return checkKeywords("ORDER BY", ["WHERE", "GROUP BY", "ORDER BY", "LIMIT", ";", "HAVING"])
+    return checkKeywords("ORDER BY ", ["SELECT", "WHERE", "GROUP BY", "FROM", "LIMIT", ";", "HAVING"])
 
 
 def checkGroup(sqlPath="", solPath=""):
-    global sql,sol
+    global sql, sol
     setup(sqlPath, solPath)
-    return checkKeywords("GROUP BY", ["WHERE", "ORDER BY", "LIMIT", ";", "HAVING"])
+    return checkKeywords("GROUP BY ", ["SELECT", "WHERE", "FROM BY", "ORDER BY", "LIMIT", ";", "HAVING"])
 
 
 def checkEquality(sqlPath="", solPath=""):

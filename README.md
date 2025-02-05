@@ -126,6 +126,9 @@ res = checkEquality()
 
 ### Changelog
 
+##### V 0.2.10
+- fixed part checks if keywords are in wrong order
+
 ##### V 0.2.9
 - added NOT support
 - improved Parentheses handling
