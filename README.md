@@ -126,6 +126,8 @@ res = checkEquality()
 
 ### Changelog
 
+##### V 0.2.7
+- Convert 
 
 ##### V 0.2.7
 - Normalize String unequality: ...<>..., ...!=..., ...NOT LIKE... --> NOT...LIKE...
