@@ -126,6 +126,10 @@ res = checkEquality()
 
 ### Changelog
 
+
+##### V 0.2.7
+- Normalize String unequality: ...<>..., ...!=..., ...NOT LIKE... --> NOT...LIKE...
+
 ##### V 0.2.6
 - Fixed bug in checkKeywords: if keyword was present in one query and not in the other, the comparison was not performed correctly.
 

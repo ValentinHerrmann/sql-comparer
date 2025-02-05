@@ -143,6 +143,11 @@ def _condition(token, alias_map, baseDict: dict):
     left = _identifier(left, alias_map, baseDict)
     right = _identifier(right, alias_map, baseDict)
 
+    if operator.value in ("!=", "<>"):
+        return f"NOT {left} LIKE {right}"
+    if operator.value in ("NOT LIKE"):
+        return f"NOT {left} LIKE {right}"
+
     if flipAllowed and left.lower() >= right.lower():
         left, right = right, left
         if operator.value == ">":
