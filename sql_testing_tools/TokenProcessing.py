@@ -1,7 +1,6 @@
 import sqlparse
-from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis
+from sqlparse.sql import Identifier, IdentifierList, Where, Comparison, Function, Parenthesis, Token
 from sqlparse.tokens import Keyword, DML, Name, Wildcard, Whitespace, Newline
-
 
 try:
     import Helper as He
@@ -115,6 +114,25 @@ def _orderby(orderby_, alias_map, baseDict: dict):
    # orderby_tokens.sort()
     return ",".join(orderby_tokens)
 
+def replace_not_with_parenthesis(where_tokens):
+    new_tokens = []
+    i = 0
+    while i < len(where_tokens):
+        if where_tokens[i].ttype is Keyword and where_tokens[i].value.upper() == "NOT":
+            if i + 1 < len(where_tokens):
+                not_token = where_tokens[i]
+                next_token = where_tokens[i + 1]
+                parenthesis = Parenthesis([not_token, Token(Whitespace, ' '), next_token])
+                new_tokens.append(parenthesis)
+                i += 2  # Skip the next token as it is already added inside the parenthesis
+            else:
+                new_tokens.append(where_tokens[i])
+                i += 1
+        else:
+            new_tokens.append(where_tokens[i])
+            i += 1
+    return new_tokens
+
 def _condition(token, alias_map, baseDict: dict):
     left, operator, right = [t for t in token.tokens if not t.is_whitespace]
 
@@ -143,11 +161,11 @@ def _condition(token, alias_map, baseDict: dict):
     left = _identifier(left, alias_map, baseDict)
     right = _identifier(right, alias_map, baseDict)
 
-    if operator.value in ("!=", "<>"):
-        return f"NOT {left.lower()} LIKE {right}"
-    if operator.value in ("NOT LIKE"):
-        return f"NOT {left.lower()} LIKE {right}"
-    if operator.value in ("=") and "%" not in right and "_" not in right:
+    if operator.value.strip() in ("!=", "<>"):
+        return f"(NOT {left.lower()} LIKE {right})"
+    if operator.value.lower().strip() == "not like":
+        return f"(NOT {left.lower()} LIKE {right})"
+    if operator.value.strip() == "=" and "%" not in right and "_" not in right:
         return f"{left.lower()} LIKE {right}"
 
 
@@ -163,7 +181,7 @@ def _condition(token, alias_map, baseDict: dict):
         elif operator.value == "<=":
             operator = ">="
 
-    return f"{left if leftLiteral else left.lower()} {operator} {right if rightLiteral else right.lower()}"
+    return f"{left if leftLiteral else left.lower()} {operator.value.upper()} {right if rightLiteral else right.lower()}"
 
 def is_value(token):
     return token.ttype in (sqlparse.tokens.Token.Literal.Number.Integer,
@@ -253,11 +271,14 @@ def _where(where, alias_map, baseDict: dict):
 
     isParanthesis = isinstance(where, Parenthesis)
     
-    where_tokens = [token for token in where.tokens if (token.ttype is not Whitespace and token.ttype is not Newline)and token.value != "WHERE"]    
+    where_tokens = [token for token in where.tokens if (token.ttype is not Whitespace and token.ttype is not Newline) and token.value != "WHERE"]
+    where_tokens = replace_not_with_parenthesis(where_tokens)
+
+    # No parentheses in where_string!
     where_string = " ".join([str(token) for token in where_tokens])
 
     and_count = where_string.upper().count(" AND ")
-    or_count  = where_string.upper().count(" OR ")
+    or_count = where_string.upper().count(" OR ")
 
     # No AND / OR
     if and_count + or_count == 0:
@@ -332,6 +353,8 @@ def _where_addBracketsAroundAND(where, alias_map, baseDict: dict):
 def _where_simpleCondition(where_tokens, alias_map, baseDict: dict):
     cond = []
     for tok in where_tokens:
+        if tok.ttype == Keyword and tok.value.upper() == "NOT":
+            cond.append("NOT ")
         if isinstance(tok, Comparison):
             cond.append(_condition(tok, alias_map, baseDict))
         elif isinstance(tok, Parenthesis):
@@ -346,13 +369,10 @@ def _where_sameStrengthKeywords(where_tokens, alias_map, baseDict: dict, keyword
     cond = []
     for tok in where_tokens:
         if isinstance(tok, Comparison):
-            cond.append(_condition(tok, alias_map, baseDict))
+            cond.append(_where_simpleCondition([tok], alias_map, baseDict))
         elif isinstance(tok, Parenthesis):
-            for _tok in tok.tokens:
-                if isinstance(_tok, Comparison):
-                    cond.append(_condition(_tok, alias_map, baseDict))
-                elif isinstance(_tok, Parenthesis):
-                    tok = _tok
+            isNot = tok.tokens[0].ttype == Keyword and tok.tokens[0].value.upper() == "NOT"
+            cond.append(("(" if isNot else "") + _where(tok, alias_map, baseDict) + (")" if isNot else ""))
     cond.sort()
     return keyword.join(cond)
 

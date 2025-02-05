@@ -166,7 +166,7 @@ def checkKeywords(startWord:str, endWords:list):
             end = len(sql)
 
         submission = str.strip(sql[start:end])
-        print("'"+submission+"'")
+        #print("'"+submission+"'")
 
         start = str.find(sol, startWord)
         end = -1
@@ -179,7 +179,7 @@ def checkKeywords(startWord:str, endWords:list):
             end = len(sol)
 
         solution = str.strip(sol[start:end])
-        print("'"+solution+"'")
+        #print("'"+solution+"'")
 
         if submission == solution:
             return ""
