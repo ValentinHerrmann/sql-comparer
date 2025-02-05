@@ -175,3 +175,11 @@ class NormalizeQuery_test(unittest.TestCase):
 
         if res == "":
             self.fail("Different grouping not recognized")
+
+    def test_a23_not_equal(self):
+        nr = '23'
+        self.helperEqual(nr)
+
+    def test_a24_not_equal(self):
+        nr = '24'
+        self.helperEqual(nr)
