@@ -126,8 +126,12 @@ res = checkEquality()
 
 ### Changelog
 
-##### V 0.2.7
-- Convert 
+##### V 0.2.9
+- added NOT support
+- improved Parentheses handling
+
+##### V 0.2.8
+- ignore case in '=' string comparison and convert to LIKE (if no '%', '_' in String)
 
 ##### V 0.2.7
 - Normalize String unequality: ...<>..., ...!=..., ...NOT LIKE... --> NOT...LIKE...

@@ -24,8 +24,12 @@ class NormalizeQuery_test(unittest.TestCase):
         with open(path, 'r') as file:
             return file.read()
 
-    def helperEqual(self, nr:str):
+    def helperEqual(self, nr: str):
         He.setup("sql_testing_tools/tests/v1/a"+nr+".sql", "sql_testing_tools/tests/v2/a"+nr+".sql")
+        print("\n\nTest "+nr+"------------------------------")
+        print("V1: "+He.sql)
+        print("V2: "+He.sol)
+        print("-------------------------------------\n\n")
         if He.sol != He.sql:
             self.fail("\n" + He.sol + "\n" + He.sql)
 
@@ -39,8 +43,12 @@ class NormalizeQuery_test(unittest.TestCase):
             
     def helperUnequal(self, nr:str):
         td = Ba.getTableDict()
-        q1 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v1/a"+nr+".sql"),td)
-        q2 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v2/a"+nr+".sql"),td)
+        q1 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v1/a"+nr+".sql"), td)
+        q2 = He.normalizeSQLQuery(self.readFile("sql_testing_tools/tests/v2/a"+nr+".sql"), td)
+        print("\n\nTest "+nr+"------------------------------")
+        print("V1: "+He.sql)
+        print("V2: "+He.sol)
+        print("-------------------------------------\n\n")
         if q1 == q2:
             self.fail("\n" + q1 + "\n" + q1)
         
@@ -182,4 +190,8 @@ class NormalizeQuery_test(unittest.TestCase):
 
     def test_a24_not_equal(self):
         nr = '24'
+        self.helperEqual(nr)
+
+    def test_a25_anton(self):
+        nr = '25'
         self.helperEqual(nr)
